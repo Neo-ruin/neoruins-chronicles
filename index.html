@@ -5,173 +5,286 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NEORUINS // CHRONICLES — Recovered Archive</title>
 <meta name="description" content="NEORUINS Chronicles — a recovered digital archive from a forgotten future.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#07070c; --panel:#0d0d15; --ink:#d8d4c8; --dim:#6b6b7a;
-    --amber:#ffb000; --cyan:#4de3ff; --red:#ff3b3b; --line:#1d1d28;
+    --bg:#0a0908; --panel:#12100d; --ink:#e8e0d0; --dim:#8a8378;
+    --gold:#c9a227; --amber:#ffb000; --cyan:#4de3ff; --line:#23201a;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{
-    background:var(--bg); color:var(--ink);
-    font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace;
-    line-height:1.7; overflow-x:hidden;
-  }
-  /* scanlines + vignette */
-  body::after{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:50;
-    background:repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
-    mix-blend-mode:multiply;
-  }
-  body::before{
-    content:""; position:fixed; inset:0; pointer-events:none; z-index:51;
-    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);
-  }
-  a{color:var(--cyan); text-decoration:none}
-  a:hover{text-shadow:0 0 8px var(--cyan)}
-  .wrap{max-width:860px; margin:0 auto; padding:0 22px}
-  /* ---------- header ---------- */
-  header{
-    border-bottom:1px solid var(--line);
-    padding:14px 0; position:sticky; top:0; z-index:40;
-    background:rgba(7,7,12,.92); backdrop-filter:blur(6px);
-  }
+  body{background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",ui-monospace,monospace; line-height:1.7; overflow-x:hidden}
+  body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:90;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px)}
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:91;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%)}
+  ::selection{background:var(--gold); color:#000}
+  a{color:inherit; text-decoration:none}
+  .wrap{max-width:900px; margin:0 auto; padding:0 22px}
+  .serif{font-family:"Cormorant Garamond",serif}
+
+  /* ---------- boot overlay ---------- */
+  #boot{position:fixed; inset:0; background:#060504; z-index:200; display:flex;
+    align-items:center; justify-content:center; transition:opacity .8s}
+  #boot.done{opacity:0; pointer-events:none}
+  #boot .term{width:min(520px,86vw); font-size:13px; color:var(--amber); line-height:2.1}
+  #boot .term .ok{color:#7dd87d}
+
+  /* ---------- nav ---------- */
+  header{position:fixed; top:0; left:0; right:0; z-index:80; padding:16px 0;
+    background:linear-gradient(rgba(6,5,4,.92), rgba(6,5,4,0)); transition:.3s}
   header .wrap{display:flex; justify-content:space-between; align-items:center}
-  .brand{color:var(--amber); font-weight:bold; letter-spacing:3px; font-size:15px}
-  .brand span{color:var(--dim); font-weight:normal}
-  nav a{margin-left:18px; font-size:12px; letter-spacing:2px; color:var(--dim)}
-  nav a:hover{color:var(--amber); text-shadow:0 0 8px var(--amber)}
+  .brand{letter-spacing:4px; font-size:13px; color:var(--ink)}
+  .brand b{color:var(--gold)}
+  nav a{margin-left:20px; font-size:11px; letter-spacing:2px; color:var(--dim); transition:.2s}
+  nav a:hover{color:var(--gold)}
+
   /* ---------- hero ---------- */
-  .hero{padding:110px 0 90px; text-align:center; position:relative}
-  .hero .sys{color:var(--dim); font-size:12px; letter-spacing:4px; margin-bottom:26px}
-  .hero .sys .dot{display:inline-block; width:8px; height:8px; border-radius:50%;
-    background:var(--red); margin-right:10px; animation:blink 1.6s infinite}
-  @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.15}}
-  h1{
-    font-size:clamp(38px,8vw,74px); letter-spacing:10px; color:var(--ink);
-    text-shadow:0 0 24px rgba(255,176,0,.35), 0 0 60px rgba(77,227,255,.15);
-    margin-bottom:18px; font-weight:bold;
-  }
-  h1 .accent{color:var(--amber)}
-  .tag{color:var(--cyan); letter-spacing:5px; font-size:13px; margin-bottom:34px}
-  .hero p{color:var(--dim); max-width:560px; margin:0 auto 40px; font-size:14px}
-  .btn{
-    display:inline-block; border:1px solid var(--amber); color:var(--amber);
-    padding:13px 34px; letter-spacing:3px; font-size:13px; margin:6px;
-    background:rgba(255,176,0,.05); transition:.25s; cursor:pointer;
-  }
-  .btn:hover{background:var(--amber); color:#000; box-shadow:0 0 24px rgba(255,176,0,.5)}
-  .btn.ghost{border-color:var(--line); color:var(--dim); background:transparent}
-  .btn.ghost:hover{border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 18px rgba(77,227,255,.3); background:transparent}
+  .hero{position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden}
+  .hero .bg{position:absolute; inset:-4%; background:url('archive-hall.jpg') center/cover;
+    animation:kenburns 26s ease-in-out infinite alternate; filter:brightness(.62) saturate(1.05)}
+  @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.12)}}
+  .hero .shade{position:absolute; inset:0; background:linear-gradient(rgba(6,5,4,.25), rgba(6,5,4,.88) 92%)}
+  .hero .inner{position:relative; z-index:2; padding:120px 22px 80px; max-width:760px}
+  .hero .kicker{font-size:11px; letter-spacing:5px; color:var(--gold); margin-bottom:22px}
+  .hero h1{font-size:clamp(44px,9vw,88px); font-weight:500; letter-spacing:6px; line-height:1.05;
+    text-shadow:0 2px 30px rgba(0,0,0,.8)}
+  .hero .sub{font-size:clamp(17px,3vw,23px); color:var(--ink); opacity:.92; margin:26px auto 14px; max-width:560px; font-style:italic}
+  .hero .sub2{font-size:12px; color:var(--dim); letter-spacing:2px; margin-bottom:38px}
+  .btn{display:inline-block; border:1px solid var(--gold); color:var(--gold); padding:14px 38px;
+    letter-spacing:3px; font-size:12px; background:rgba(201,162,39,.07); transition:.25s; cursor:pointer; font-family:inherit}
+  .btn:hover{background:var(--gold); color:#000; box-shadow:0 0 26px rgba(201,162,39,.45)}
+  .btn.ghost{border-color:var(--line); color:var(--dim); background:transparent; margin-left:10px}
+  .btn.ghost:hover{border-color:var(--cyan); color:var(--cyan); box-shadow:none; background:transparent}
+  .scrollhint{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); z-index:2;
+    font-size:10px; letter-spacing:4px; color:var(--dim); animation:bob 2.4s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
   /* ---------- sections ---------- */
-  section{padding:70px 0; border-top:1px solid var(--line)}
-  .sec-head{font-size:13px; letter-spacing:4px; color:var(--amber); margin-bottom:34px}
-  .sec-head::before{content:"> "}
-  /* relic cards */
-  .relic{
-    border:1px solid var(--line); background:var(--panel);
-    padding:28px; margin-bottom:22px; position:relative; transition:.25s;
-  }
-  .relic:hover{border-color:var(--amber); box-shadow:0 0 20px rgba(255,176,0,.12)}
-  .relic .id{color:var(--amber); letter-spacing:3px; font-size:13px; margin-bottom:8px}
-  .relic h3{font-size:22px; letter-spacing:2px; margin-bottom:10px}
-  .relic p{color:var(--dim); font-size:13px}
-  .relic .status{
-    position:absolute; top:28px; right:28px; font-size:11px; letter-spacing:2px;
-    padding:5px 12px; border:1px solid;
-  }
-  .st-open{color:var(--cyan); border-color:var(--cyan)}
+  section{padding:84px 0; border-top:1px solid var(--line); position:relative}
+  .sec-head{font-size:11px; letter-spacing:5px; color:var(--gold); margin-bottom:14px}
+  .sec-title{font-size:clamp(30px,5vw,46px); font-weight:500; margin-bottom:36px; letter-spacing:2px}
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .8s, transform .8s}
+  .reveal.in{opacity:1; transform:none}
+
+  /* ---------- relic cards ---------- */
+  .relic{border:1px solid var(--line); background:var(--panel); margin-bottom:18px; overflow:hidden; transition:border-color .3s}
+  .relic.open{border-color:var(--gold)}
+  .relic-head{display:flex; justify-content:space-between; align-items:center; padding:24px 26px; cursor:pointer; user-select:none}
+  .relic-head .id{font-size:11px; letter-spacing:3px; color:var(--gold)}
+  .relic-head h3{font-size:24px; font-weight:500; letter-spacing:1px; margin-top:6px}
+  .relic-head .st{font-size:10px; letter-spacing:2px; padding:6px 14px; border:1px solid; white-space:nowrap; margin-left:16px}
+  .st-open{color:#7dd87d; border-color:#7dd87d}
   .st-sealed{color:var(--dim); border-color:var(--dim)}
-  /* about */
-  .about p{color:var(--dim); font-size:14px; margin-bottom:18px; max-width:640px}
-  .about p b{color:var(--ink); font-weight:normal}
-  /* transmissions */
+  .relic-body{max-height:0; overflow:hidden; transition:max-height .7s ease}
+  .relic-body .pad{padding:0 26px 28px}
+  .relic-body img{width:100%; border:1px solid var(--line); display:block; margin-bottom:20px}
+  .relic-body .meta{font-size:11px; letter-spacing:2px; color:var(--dim); margin-bottom:14px; line-height:2}
+  .relic-body .meta b{color:var(--gold); font-weight:500}
+  .relic-body p{font-size:14px; color:var(--dim); margin-bottom:22px; max-width:620px}
+  .denied{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+  .denied-msg{font-size:11px; letter-spacing:2px; color:var(--amber); padding:0 26px 24px; display:none}
+
+  /* ---------- chapter strip ---------- */
+  .chap-strip{display:flex; gap:0; border:1px solid var(--line); margin-bottom:8px; overflow:hidden}
+  .chap-strip .num{flex:0 0 120px; display:flex; align-items:center; justify-content:center;
+    font-size:44px; color:var(--gold); border-right:1px solid var(--line); padding:30px 0}
+  .chap-strip .tx{padding:28px 30px}
+  .chap-strip .tx .k{font-size:10px; letter-spacing:4px; color:var(--dim); margin-bottom:8px}
+  .chap-strip .tx h3{font-size:28px; font-weight:500; margin-bottom:8px}
+  .chap-strip .tx p{font-size:13px; color:var(--dim); margin-bottom:16px}
+  .chap-strip.sealed{opacity:.45}
+  .chap-strip.sealed .num{color:var(--dim)}
+
+  /* ---------- about / signals ---------- */
+  .about p{color:var(--dim); font-size:14px; margin-bottom:18px; max-width:660px}
+  .about p b{color:var(--ink); font-weight:500}
   .links{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px}
-  .links a{
-    border:1px solid var(--line); background:var(--panel); padding:22px 10px;
-    text-align:center; font-size:12px; letter-spacing:3px; color:var(--ink); transition:.25s;
-  }
-  .links a:hover{border-color:var(--cyan); transform:translateY(-2px)}
+  .links a{border:1px solid var(--line); background:var(--panel); padding:24px 10px; text-align:center;
+    font-size:12px; letter-spacing:3px; transition:.25s}
+  .links a:hover{border-color:var(--gold); transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.5)}
   .links a small{display:block; color:var(--dim); margin-top:8px; letter-spacing:1px; font-size:10px}
-  /* footer */
-  footer{border-top:1px solid var(--line); padding:34px 0 46px; text-align:center}
-  footer p{color:var(--dim); font-size:11px; letter-spacing:2px}
-  footer .cursor{display:inline-block; width:9px; height:16px; background:var(--amber);
-    vertical-align:-2px; animation:blink 1.1s infinite; margin-left:6px}
-  ::selection{background:var(--amber); color:#000}
+
+  footer{border-top:1px solid var(--line); padding:36px 0 48px; text-align:center}
+  footer p{color:var(--dim); font-size:10px; letter-spacing:3px}
+  .cursor{display:inline-block; width:8px; height:14px; background:var(--gold); vertical-align:-2px; animation:blink 1.1s infinite; margin-left:6px}
+  @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.1}}
 </style>
 </head>
 <body>
 
+<div id="boot"><div class="term" id="bootText"></div></div>
+
 <header>
   <div class="wrap">
-    <div class="brand">NEORUINS <span>// CHRONICLES</span></div>
+    <a class="brand" href="index.html"><b>NEORUINS</b> // CHRONICLES</a>
     <nav>
       <a href="#archive">ARCHIVE</a>
-      <a href="#about">ABOUT</a>
-      <a href="#transmissions">SIGNALS</a>
+      <a href="chapter-1.html">CHAPTER I</a>
+      <a href="#signals">SIGNALS</a>
     </nav>
   </div>
 </header>
 
-<div class="wrap">
-  <div class="hero">
-    <div class="sys"><span class="dot"></span>ARCHIVE TERMINAL v1.0 — LINK ESTABLISHED</div>
-    <h1>NEO<span class="accent">RUINS</span></h1>
-    <div class="tag">C H R O N I C L E S</div>
-    <p>A recovered digital archive from a forgotten future.<br>
-    Fragments surface when they surface. Nothing here is complete.<br>
-    That is the point.</p>
-    <a class="btn" href="#archive">ENTER THE ARCHIVE</a>
-    <a class="btn ghost" href="#transmissions">FOLLOW THE SIGNALS</a>
+<div class="hero">
+  <div class="bg"></div><div class="shade"></div>
+  <div class="inner">
+    <div class="kicker">THE PUBLIC ARCHIVE · CURRENT ERA</div>
+    <h1 class="serif">THE NEORUINS<br>CHRONICLES</h1>
+    <p class="sub serif">Something has awakened beneath the Ruins.</p>
+    <p class="sub2">FOR THE FIRST TIME, WHAT WAS THOUGHT LOST IS BEGINNING TO SURFACE.</p>
+    <a class="btn" href="chapter-1.html">ENTER CHAPTER I</a>
+    <a class="btn ghost" href="#archive">BROWSE THE INDEX</a>
   </div>
+  <div class="scrollhint">SCROLL</div>
+</div>
 
+<div class="wrap">
   <section id="archive">
-    <div class="sec-head">ARCHIVE_INDEX — RECOVERED ENTRIES</div>
-
-    <div class="relic">
-      <div class="status st-open">RECOVERED</div>
-      <div class="id">RELIC // 001</div>
-      <h3>First Entry</h3>
-      <p>The first recovered artifact of the NEORUINS archive. Its contents are undergoing archival review. What it means is not yet decided — some questions are meant to stay open.</p>
+    <div class="reveal">
+      <div class="sec-head">// ARCHIVE_INDEX</div>
+      <div class="sec-title serif">Recovered Entries</div>
     </div>
 
-    <div class="relic">
-      <div class="status st-sealed">AWAITING RECOVERY</div>
-      <div class="id">RELIC // 002</div>
-      <h3>Signal Detected</h3>
-      <p>Anomaly registered in the deep layers. Recovery expedition pending. The archive does not rush.</p>
+    <div class="relic reveal" id="relic001">
+      <div class="relic-head" onclick="toggleRelic('relic001', true)">
+        <div><div class="id">RELIC // 001</div><h3 class="serif">The First Recovery</h3></div>
+        <div class="st st-open">RECOVERED</div>
+      </div>
+      <div class="relic-body"><div class="pad">
+        <img src="relic-001.jpg" alt="Relic 001 — recovered artifact">
+        <div class="meta"><b>ARCHIVE RECORD // 001</b><br>CLASSIFICATION // ARTIFACT<br>CHRONICLE ENTRY // 001 — THE FIRST RECOVERY</div>
+        <p>Relic 001 is the first recovered Relic of Chapter I. Recovered from the deep layers beneath the Ruins, it marks the moment the archive stopped being a rumor. What it means is not yet decided — some questions are meant to stay open.</p>
+        <a class="btn" href="chapter-1.html">OPEN CHRONICLE ENTRY</a>
+      </div></div>
     </div>
 
-    <div class="relic">
-      <div class="status st-sealed">AWAITING RECOVERY</div>
-      <div class="id">RELIC // 003</div>
-      <h3>Uncharted</h3>
-      <p>No signal yet. The forgotten future is patient, and so are we.</p>
+    <div class="relic reveal" id="relic002">
+      <div class="relic-head" onclick="toggleRelic('relic002', false)">
+        <div><div class="id">RECORD // 002</div><h3 class="serif">Unrecovered</h3></div>
+        <div class="st st-sealed">SEALED</div>
+      </div>
+      <div class="denied-msg">// ACCESS DENIED — RECORD NOT YET RECOVERED</div>
+    </div>
+
+    <div class="relic reveal" id="relic003">
+      <div class="relic-head" onclick="toggleRelic('relic003', false)">
+        <div><div class="id">RECORD // 003</div><h3 class="serif">Unrecovered</h3></div>
+        <div class="st st-sealed">SEALED</div>
+      </div>
+      <div class="denied-msg">// ACCESS DENIED — RECORD NOT YET RECOVERED</div>
+    </div>
+
+    <div class="relic reveal" id="relic004">
+      <div class="relic-head" onclick="toggleRelic('relic004', false)">
+        <div><div class="id">RECORD // 004</div><h3 class="serif">Unrecovered</h3></div>
+        <div class="st st-sealed">SEALED</div>
+      </div>
+      <div class="denied-msg">// ACCESS DENIED — RECORD NOT YET RECOVERED</div>
+    </div>
+  </section>
+
+  <section id="chapters">
+    <div class="reveal">
+      <div class="sec-head">// CHAPTERS</div>
+      <div class="sec-title serif">The Chronicle So Far</div>
+    </div>
+    <a href="chapter-1.html"><div class="chap-strip reveal">
+      <div class="num serif">I</div>
+      <div class="tx">
+        <div class="k">CURRENT CHAPTER</div>
+        <h3 class="serif">The Awakening</h3>
+        <p>Something has awakened beneath the Ruins. The first Relic has been recovered.</p>
+        <span class="btn">READ THE ENTRY</span>
+      </div>
+    </div></a>
+    <div class="chap-strip sealed reveal">
+      <div class="num serif">II</div>
+      <div class="tx">
+        <div class="k">SEALED</div>
+        <h3 class="serif">???</h3>
+        <p>The archive has not yet spoken of what comes next.</p>
+      </div>
     </div>
   </section>
 
   <section id="about" class="about">
-    <div class="sec-head">ABOUT_THE_ARCHIVE</div>
-    <p><b>NEORUINS Chronicles</b> is a fictional archive — fragments of media, artifacts, and transmissions presented as if recovered from a forgotten future.</p>
-    <p>It lives across stories, visuals, and objects. Some pieces you read. Some you watch. Some you hold. All of them are part of the same buried signal.</p>
-    <p>New entries are recovered over time. The archive grows the way ruins do — slowly, and all at once.</p>
+    <div class="reveal">
+      <div class="sec-head">// ABOUT_THE_ARCHIVE</div>
+      <div class="sec-title serif">What Is This Place</div>
+      <p><b>NEORUINS Chronicles</b> is a fictional archive — fragments of media, artifacts, and transmissions presented as if recovered from a forgotten future.</p>
+      <p>It lives across stories, visuals, and objects. Some pieces you read. Some you watch. Some you hold. All of them are part of the same buried signal.</p>
+      <p>New entries are recovered over time. The archive grows the way ruins do — slowly, and all at once.</p>
+    </div>
   </section>
 
-  <section id="transmissions">
-    <div class="sec-head">SIGNALS — FOLLOW THE ARCHIVE</div>
-    <div class="links">
-      <a href="#">X / TWITTER<small>@neoruins — link soon</small></a>
-      <a href="#">YOUTUBE<small>transmissions — link soon</small></a>
-      <a href="#">TIKTOK<small>fragments — link soon</small></a>
-      <a href="#">FOURTHWALL<small>artifacts &amp; merch — link soon</small></a>
+  <section id="signals">
+    <div class="reveal">
+      <div class="sec-head">// SIGNALS</div>
+      <div class="sec-title serif">Follow the Archive</div>
+      <div class="links">
+        <a href="#">X / TWITTER<small>link soon</small></a>
+        <a href="#">YOUTUBE<small>link soon</small></a>
+        <a href="#">TIKTOK<small>link soon</small></a>
+        <a href="#">FOURTHWALL<small>link soon</small></a>
+      </div>
     </div>
   </section>
 </div>
 
-<footer>
-  <p>NEORUINS // CHRONICLES — THE ARCHIVE REMEMBERS<span class="cursor"></span></p>
-</footer>
+<footer><p>NEORUINS // CHRONICLES — THE ARCHIVE REMEMBERS<span class="cursor"></span></p></footer>
 
+<script>
+  // boot sequence
+  const lines = [
+    "> ESTABLISHING UPLINK ............ <span class='ok'>OK</span>",
+    "> ARCHIVE NODE // NEORUINS-01 .... <span class='ok'>OK</span>",
+    "> DECRYPTING INDEX ............... <span class='ok'>OK</span>",
+    "> WELCOME, ARCHIVIST"
+  ];
+  const bt = document.getElementById('bootText');
+  let li = 0;
+  function typeLine(){
+    if(li >= lines.length){
+      setTimeout(()=>document.getElementById('boot').classList.add('done'), 450);
+      return;
+    }
+    const div = document.createElement('div');
+    bt.appendChild(div);
+    const html = lines[li]; let ci = 0, plain = html.replace(/<[^>]+>/g,'');
+    const iv = setInterval(()=>{
+      ci++;
+      div.innerHTML = html.slice(0, html.indexOf('<') > -1 && ci > plain.length ? html.length : ci) || plain.slice(0,ci);
+      if(ci >= plain.length){ div.innerHTML = html; clearInterval(iv); li++; setTimeout(typeLine, 260); }
+    }, 18);
+  }
+  typeLine();
+
+  // relic accordion
+  function toggleRelic(id, openable){
+    const el = document.getElementById(id);
+    if(!openable){
+      el.classList.remove('denied'); void el.offsetWidth; el.classList.add('denied');
+      const msg = el.querySelector('.denied-msg'); msg.style.display = 'block';
+      setTimeout(()=>msg.style.display = 'none', 1800);
+      return;
+    }
+    const body = el.querySelector('.relic-body');
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.relic.open').forEach(r=>{
+      r.classList.remove('open'); r.querySelector('.relic-body').style.maxHeight = '0px';
+    });
+    if(!isOpen){ el.classList.add('open'); body.style.maxHeight = body.scrollHeight + 'px'; }
+  }
+
+  // scroll reveals
+  const io = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+  }), {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
 </body>
 </html>
