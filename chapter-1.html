@@ -8,8 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0a0908; --panel:#12100d; --ink:#e8e0d0; --dim:#8a8378;
-    --gold:#c9a227; --amber:#ffb000; --line:#23201a}
+  :root{--bg:#0a0908; --panel:#1a1510; --ink:#e8e0d0; --dim:#a09a8c;
+    --gold:#c9a227; --amber:#ffb000; --line:#3d3226}
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",ui-monospace,monospace; line-height:1.8; overflow-x:hidden}
@@ -47,7 +47,9 @@
   .prose{font-family:"Cormorant Garamond",serif; font-size:21px; line-height:1.9; color:var(--ink); max-width:640px}
   .prose p{margin-bottom:26px}
   .prose .dim{color:var(--dim); font-size:17px; font-family:"IBM Plex Mono",monospace; letter-spacing:1px}
-  .artifact{border:1px solid var(--line); background:var(--panel); padding:26px; margin:40px 0}
+  .artifact{border:1px solid var(--line); background:linear-gradient(180deg, #1e1812, var(--panel));
+    padding:26px; margin:40px 0;
+    box-shadow:inset 0 1px 0 rgba(255,235,200,.06), 0 4px 18px rgba(0,0,0,.45)}
   .artifact img{width:100%; display:block; border:1px solid var(--line); margin-bottom:20px}
   .artifact .meta{font-size:11px; letter-spacing:2px; color:var(--dim); line-height:2.1}
   .artifact .meta b{color:var(--gold); font-weight:500}
