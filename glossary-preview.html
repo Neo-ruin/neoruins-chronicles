@@ -67,6 +67,7 @@
   .term-card .tag{font-size:10px; letter-spacing:2px; white-space:nowrap}
   .tag.defined{color:#7dd87d}
   .tag.sealed{color:var(--red)}
+  .tag.unrevealed{color:var(--amber)}
   .term-card .body{max-height:0; overflow:hidden; transition:max-height .5s ease}
   .term-card.open .body{max-height:400px}
   .term-card .body p{padding:0 24px 22px; font-family:"Cormorant Garamond",serif; font-size:18px;
@@ -149,6 +150,11 @@
   <div class="letter">// E</div>
 
   <div class="term-card" onclick="this.classList.toggle('open')">
+    <div class="head"><span class="word serif">ECHOES</span><span class="tag sealed">SEALED</span></div>
+    <div class="body"><p class="sealed-note">// UNRECOVERED</p></div>
+  </div>
+
+  <div class="term-card" onclick="this.classList.toggle('open')">
     <div class="head"><span class="word serif">THE ERAS</span><span class="tag defined">DEFINED</span></div>
     <div class="body"><p>The six eras of the making of NEORUINS — from the Foundation to the Ruins Awakening. The real-world history of how this universe came to be.</p></div>
   </div>
@@ -158,6 +164,18 @@
   <div class="term-card" onclick="this.classList.toggle('open')">
     <div class="head"><span class="word serif">FOUNDER EDITION</span><span class="tag defined">DEFINED</span></div>
     <div class="body"><p>The first relic of NEORUINS made physical — a limited collection for those who were here at the beginning.</p></div>
+  </div>
+
+  <div class="term-card" onclick="this.classList.toggle('open')">
+    <div class="head"><span class="word serif">THE FORGOTTEN</span><span class="tag unrevealed">UNREVEALED</span></div>
+    <div class="body"><p>A designation associated with the vanished civilizations. Their true identities, fate, and connection to the Ruins remain unknown. Deep canon — not yet revealed.</p></div>
+  </div>
+
+  <div class="letter">// L</div>
+
+  <div class="term-card" onclick="this.classList.toggle('open')">
+    <div class="head"><span class="word serif">LOST CIVILIZATIONS</span><span class="tag defined">DEFINED</span></div>
+    <div class="body"><p>Ancient societies whose remnants remain throughout the Ruins. Their structures, systems, artifacts, and Echoes are evidence of civilizations that disappeared after encountering the mystery surrounding the Signal and the Silence.</p></div>
   </div>
 
   <div class="letter">// N</div>
@@ -187,16 +205,22 @@
   <div class="letter">// S</div>
 
   <div class="term-card" onclick="this.classList.toggle('open')">
+  <div class="term-card" onclick="this.classList.toggle('open')">
+    <div class="head"><span class="word serif">THE SIGNAL</span><span class="tag sealed">SEALED</span></div>
+    <div class="body"><p class="sealed-note">// UNRECOVERED — THE MYSTERY REMAINS</p></div>
+  </div>
+
     <div class="head"><span class="word serif">SIGNALS</span><span class="tag defined">DEFINED</span></div>
     <div class="body"><p>The live channels where the archive broadcasts — every platform, every outpost, one transmission.</p></div>
   </div>
 
-  <div class="letter">// T</div>
-
   <div class="term-card" onclick="this.classList.toggle('open')">
-    <div class="head"><span class="word serif">THE BUILDERS</span><span class="tag sealed">SEALED</span></div>
-    <div class="body"><p class="sealed-note">// UNRECOVERED — ORIGINAL CONSTRUCTION UNKNOWN</p></div>
+    <div class="head"><span class="word serif">THE SILENCE</span><span class="tag sealed">SEALED</span></div>
+    <div class="body"><p class="sealed-note">// UNRECOVERED — THE MYSTERY REMAINS</p></div>
   </div>
+
+
+  <div class="letter">// T</div>
 
   <div class="term-card" onclick="this.classList.toggle('open')">
     <div class="head"><span class="word serif">TRANSMISSIONS</span><span class="tag defined">DEFINED</span></div>
@@ -214,7 +238,7 @@
 <script>
   const lines = [
     "> LOADING GLOSSARY .............. <span class='ok'>OK</span>",
-    "> 15 TERMS INDEXED · 2 SEALED .... <span class='ok'>OK</span>"
+    "> 19 TERMS INDEXED · 4 SEALED .... <span class='ok'>OK</span>"
   ];
   const bt = document.getElementById('bootText');
   let li = 0;
