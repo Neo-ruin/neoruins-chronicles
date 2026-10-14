@@ -45,6 +45,17 @@
   .brand b{color:var(--gold)}
   nav a{margin-left:20px; font-size:11px; letter-spacing:2px; color:var(--dim)}
   nav a:hover{color:var(--gold)}
+  .menu-toggle{display:none; background:none; border:1px solid var(--gold); color:var(--gold);
+    font-family:inherit; font-size:14px; letter-spacing:3px; padding:8px 14px; cursor:pointer}
+  @media(max-width:820px){
+    .menu-toggle{display:block}
+    header nav{display:none; position:absolute; top:100%; left:0; right:0;
+      background:rgba(6,5,4,.97); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+      flex-direction:column; padding:8px 0; z-index:85}
+    header nav.open{display:flex}
+    header nav a{margin:0; padding:14px 24px; font-size:12px; border-bottom:1px solid rgba(61,50,38,.4)}
+    header nav a:last-child{border-bottom:none}
+  }
   .hero{position:relative; min-height:60vh; display:flex; align-items:center; justify-content:center;
     text-align:center; overflow:hidden; border-bottom:1px solid var(--line)}
   .hero .bg{position:absolute; inset:-4%; background:url('archive-hall.jpg') center/cover;
@@ -104,7 +115,8 @@
 <header>
   <div class="wrap">
     <a class="brand" href="index.html"><b>NEORUINS</b> // CHRONICLES</a>
-    <nav>
+    <button class="menu-toggle" aria-label="Menu" onclick="this.parentNode.querySelector('nav').classList.toggle('open')">///</button>
+    <nav onclick="this.classList.remove('open')">
       <a href="index.html">ARCHIVE</a>
       <a href="chapter-1.html">CHAPTER I</a>
       <a href="about.html">ABOUT</a>
