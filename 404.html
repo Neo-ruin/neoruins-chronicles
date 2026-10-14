@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record Not Found // NEORUINS CHRONICLES</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0908; --ink:#e8e0d0; --dim:#a09a8c;
+    --gold:#c9a227; --amber:#ffb000; --line:#3d3226}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",ui-monospace,monospace;
+    line-height:1.8; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden}
+  body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:90;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px)}
+  .bg{position:fixed; inset:-4%; background:url('archive-hall.jpg') center/cover; filter:brightness(.25)}
+  .shade{position:fixed; inset:0; background:radial-gradient(ellipse at center, rgba(6,5,4,.4), rgba(6,5,4,.94))}
+  .inner{position:relative; z-index:2; padding:40px 22px; max-width:640px}
+  .code{font-size:clamp(80px,18vw,160px); font-weight:500; color:var(--gold); letter-spacing:8px;
+    text-shadow:0 0 60px rgba(201,162,39,.35); font-family:"Cormorant Garamond",serif; line-height:1}
+  .kicker{font-size:11px; letter-spacing:5px; color:var(--amber); margin:18px 0 14px}
+  h1{font-size:clamp(24px,5vw,38px); font-weight:500; letter-spacing:3px; font-family:"Cormorant Garamond",serif}
+  p{font-size:13px; color:var(--dim); letter-spacing:1px; margin:18px 0 34px; font-style:italic}
+  .btn{display:inline-block; border:1px solid var(--gold); color:var(--gold); padding:15px 40px;
+    letter-spacing:3px; font-size:12px; transition:.25s; text-decoration:none; font-family:inherit}
+  .btn:hover{background:var(--gold); color:#000; box-shadow:0 0 26px rgba(201,162,39,.45)}
+  .term{margin-top:44px; font-size:11px; color:var(--amber); letter-spacing:1px; line-height:2}
+  .term .err{color:#e03a3a}
+  .cursor{display:inline-block; width:8px; height:14px; background:var(--gold); vertical-align:-2px; animation:blink 1.1s infinite; margin-left:6px}
+  @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.1}}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="shade"></div>
+<div class="inner">
+  <div class="code">404</div>
+  <div class="kicker">// ARCHIVE QUERY FAILED</div>
+  <h1 class="serif">This Record Was Never Recovered</h1>
+  <p class="serif">The archive searched every hall, every vault, every buried signal.<br>What you're looking for isn't here — or hasn't been unearthed yet.</p>
+  <a class="btn" href="index.html">RETURN TO THE ARCHIVE →</a>
+  <div class="term">
+    &gt; QUERY: <span id="path"></span><br>
+    &gt; RESULT: <span class="err">NOT FOUND</span><span class="cursor"></span>
+  </div>
+</div>
+<script>
+  document.getElementById('path').textContent = window.location.pathname;
+</script>
+</body>
+</html>
