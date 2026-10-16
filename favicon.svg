@@ -1,1 +1,13 @@
-PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTAiIGZpbGw9IiMwYTA5MDgiLz4KICA8bGluZSB4MT0iMzIiIHkxPSI4IiB4Mj0iMzIiIHkyPSI1NiIgc3Ryb2tlPSIjYzlhMjI3IiBzdHJva2Utd2lkdGg9IjQuNSIvPgogIDxnIHN0cm9rZT0iI2M5YTIyNyIgc3Ryb2tlLXdpZHRoPSIzLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CiAgICA8bGluZSB4MT0iMzIiIHkxPSIyMCIgeDI9IjE4IiB5Mj0iMTAiLz4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjIwIiB4Mj0iNDYiIHkyPSIxMCIvPgogICAgPGxpbmUgeDE9IjMyIiB5MT0iMjUiIHgyPSIxNSIgeTI9IjI1Ii8+CiAgICA8bGluZSB4MT0iMzIiIHkxPSIyNSIgeDI9IjQ5IiB5Mj0iMjUiLz4KICAgIDxsaW5lIHgxPSIzMiIgeTE9IjMwIiB4Mj0iMTgiIHkyPSI0MCIvPgogICAgPGxpbmUgeDE9IjMyIiB5MT0iMzAiIHgyPSI0NiIgeTI9IjQwIi8+CiAgPC9nPgogIDxsaW5lIHgxPSIyNCIgeTE9IjU2IiB4Mj0iNDAiIHkyPSI1NiIgc3Ryb2tlPSIjYzlhMjI3IiBzdHJva2Utd2lkdGg9IjMuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPgo=
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#0a0908"/>
+  <line x1="32" y1="8" x2="32" y2="56" stroke="#c9a227" stroke-width="4.5"/>
+  <g stroke="#c9a227" stroke-width="3.5" stroke-linecap="round">
+    <line x1="32" y1="20" x2="18" y2="10"/>
+    <line x1="32" y1="20" x2="46" y2="10"/>
+    <line x1="32" y1="25" x2="15" y2="25"/>
+    <line x1="32" y1="25" x2="49" y2="25"/>
+    <line x1="32" y1="30" x2="18" y2="40"/>
+    <line x1="32" y1="30" x2="46" y2="40"/>
+  </g>
+  <line x1="24" y1="56" x2="40" y2="56" stroke="#c9a227" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
