@@ -26,7 +26,7 @@ header{border-bottom:1px solid var(--line);padding:14px 22px;display:flex;justif
 .nav{font-size:11px;letter-spacing:2px}
 .nav a{color:var(--dim);text-decoration:none;margin-left:18px}
 .nav a:hover{color:var(--gold)}
-.vault-corner{position:fixed;top:64px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:3px;padding:10px 20px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner{position:fixed;bottom:22px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:3px;padding:10px 20px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
 .vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
 main{flex:1;display:flex;justify-content:center;padding:30px 16px}
 .terminal{width:100%;max-width:860px;background:#050403;border:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.8),inset 0 0 60px rgba(201,162,39,.03);display:flex;flex-direction:column;height:70vh;min-height:480px}
@@ -54,7 +54,7 @@ footer{border-top:1px solid var(--line);padding:14px;text-align:center;font-size
 .try-chip{background:var(--panel);border:1px solid var(--line);color:var(--green);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:1px;padding:8px 14px;cursor:pointer;transition:.2s}
 .try-chip:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 12px rgba(201,162,39,.3)}
 .try-label{text-align:center;font-size:10px;letter-spacing:3px;color:var(--dim);padding:14px 0 8px}
-@media(max-width:600px){.vault-corner{top:60px;right:12px;font-size:11px;padding:8px 14px}.terminal{height:75vh}}
+@media(max-width:600px){.vault-corner{bottom:22px;right:12px;font-size:11px;padding:8px 14px}.terminal{height:75vh}}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
