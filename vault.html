@@ -50,13 +50,7 @@ h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-
 .discount-code{background:var(--bg); border:1px dashed var(--gold); padding:20px; text-align:center; margin:16px 0}
 .discount-code .code{font-size:28px; letter-spacing:6px; color:var(--amber); font-weight:500}
 .discount-code .desc{font-size:11px; color:var(--dim); letter-spacing:2px; margin-top:8px}
-.relic-card{border:2px solid var(--gold); background:linear-gradient(135deg,#1a1510 0%,#0a0908 100%); padding:30px; margin:16px 0; text-align:center; position:relative}
-.relic-card::before{content:"◈"; position:absolute; top:10px; left:15px; color:var(--gold); font-size:18px}
-.relic-card::after{content:"◈"; position:absolute; top:10px; right:15px; color:var(--gold); font-size:18px}
-.relic-card h3{font-family:"Cormorant Garamond",serif; font-size:22px; letter-spacing:3px; color:var(--ink); margin-bottom:4px}
-.relic-card .num{font-size:10px; letter-spacing:4px; color:var(--gold); margin-bottom:16px}
-.relic-card .details{font-size:12px; color:var(--dim); line-height:2; text-align:left; margin-top:16px}
-.relic-card .details b{color:var(--ink)}
+.relic-card-img{display:block; max-width:420px; width:100%; height:auto; margin:16px auto; border:2px solid var(--gold); box-shadow:0 0 24px rgba(201,162,39,.25)}
 .next-clue{border:1px solid var(--cyan); padding:20px; margin:16px 0; font-size:13px; color:var(--cyan); letter-spacing:1px; line-height:2}
 .back-link{margin-top:40px; font-size:11px; letter-spacing:3px; color:var(--dim)}
 .back-link a{color:var(--gold); text-decoration:none}
@@ -127,17 +121,8 @@ h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-
   <div class="reward">
     <div class="label">COLLECTIBLE ARTIFACT</div>
     <h2>Relic Card #001</h2>
-    <div class="relic-card">
-      <h3>THE NINTH SIGNATURE</h3>
-      <div class="num">ARCHIVE RELIC 001 OF UNKNOWN TOTAL</div>
-      <div class="details">
-        <b>Classification:</b> Document Fragment<br>
-        <b>Recovery Site:</b> Structure K, [COORDINATES REDACTED]<br>
-        <b>Threat Level:</b> UNDETERMINED<br>
-        <b>Description:</b> A sign-in ledger bearing nine signatures from an eight-person expedition. The ninth signature matches no known team member. Ink analysis suggests it was written from the inside of the page.
-      </div>
-    </div>
-    <p style="font-size:11px; color:var(--dim); text-align:center; margin-top:10px;">Screenshot or save this card. More will surface.</p>
+    <img src="relic-card-001.jpg" alt="Relic Card #001 — The Ninth Signature" class="relic-card-img" loading="lazy">
+    <p style="font-size:11px; color:var(--dim); text-align:center; margin-top:10px;">Long-press or right-click to save this card. More will surface.</p>
   </div>
 
   <!-- Discount Code -->
