@@ -169,7 +169,18 @@ h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-
 </div>
 
 <script>
-const PASSWORD = "ECHO73";
+// Vault sequence: assembled at runtime from archive fragments.
+// Fragments are stored out of order and XOR-encoded. Decoys included.
+const _a = [0x0, 0x60, 0x53, 0x18, 0x5f, 0x7f]; // encoded fragments
+const _b = [0x43, 0x2e, 0x53, 0x11, 0x46, 0x3b]; // decoy stream
+const _k = [0x43, 0x2f, 0x60, 0x5d, 0x68, 0x37]; // fragment key
+const _o = [3, 0, 5, 1, 4, 2];                   // reassembly order
+function _seq() {
+  let s = '';
+  for (let i = 0; i < _o.length; i++) s += String.fromCharCode(_a[_o[i]] ^ _k[_o[i]]);
+  return s;
+}
+const PASSWORD = _seq();
 const input = document.getElementById('pwInput');
 const btn = document.getElementById('unlockBtn');
 const msg = document.getElementById('message');
