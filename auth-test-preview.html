@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Observer Access Test // NEORUINS CHRONICLES</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<style>
+:root{--bg:#0a0908;--panel:#1a1510;--ink:#e8e0d0;--dim:#a09a8c;--gold:#c9a227;--line:#3d3226;--green:#33ff66;--red:#ff4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Mono",monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:60px 20px}
+h1{font-family:"Cormorant Garamond",serif;font-size:32px;letter-spacing:2px;color:var(--gold);margin-bottom:8px}
+.sub{font-size:11px;color:var(--dim);letter-spacing:2px;margin-bottom:36px}
+.card{border:1px solid var(--line);background:var(--panel);max-width:520px;width:100%;padding:32px;margin-bottom:20px}
+.card h2{font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:16px}
+.card p{font-size:12px;color:var(--dim);line-height:2;margin-bottom:12px}
+#status{font-size:13px;margin-bottom:8px}
+#status .on{color:var(--green)}
+#status .off{color:var(--red)}
+#progress{font-size:12px;line-height:2.2;color:var(--dim);white-space:pre-wrap}
+#progress b{color:var(--ink)}
+.row{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap}
+button{border:2px solid var(--gold);color:var(--gold);background:transparent;font-family:inherit;font-size:11px;letter-spacing:2px;padding:10px 20px;cursor:pointer}
+button:hover{background:var(--gold);color:#000}
+button.danger{border-color:var(--red);color:var(--red)}
+button.danger:hover{background:var(--red);color:#000}
+</style>
+</head>
+<body>
+<h1>OBSERVER ACCESS TEST</h1>
+<p class="sub">PRIVATE PREVIEW — AUTH SYSTEM VERIFICATION</p>
+
+<div class="card">
+  <h2>SESSION</h2>
+  <div id="status"><span class="off">● NOT SIGNED IN</span></div>
+  <p id="userEmail"></p>
+  <div class="row">
+    <button data-obs-auth data-obs-label="SIGN IN">SIGN IN</button>
+    <button class="danger" id="signOutBtn" style="display:none">SIGN OUT</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>PROFILE & PROGRESS</h2>
+  <div id="progress">Sign in to load your observer record.</div>
+  <div class="row">
+    <button id="testVault">SIMULATE VAULT UNLOCK</button>
+    <button id="testCard">SIMULATE RELIC CLAIM</button>
+  </div>
+</div>
+
+<!-- Auth modal -->
+<div id="modalRoot"></div>
+<script>
+fetch('auth-modal.html').then(r=>r.text()).then(html=>{
+  document.getElementById('modalRoot').innerHTML = html;
+  const s = document.createElement('script');
+  s.textContent = html.split('<script>')[1].split('</'+'script>')[0];
+  document.body.appendChild(s);
+  init();
+});
+
+async function init(){
+  await ObserverAuth.init();
+  updateUI();
+  document.addEventListener('observer-auth-change', updateUI);
+  document.getElementById('signOutBtn').addEventListener('click', async ()=>{
+    await ObserverAuth.signOut(); updateUI();
+  });
+  document.getElementById('testVault').addEventListener('click', async ()=>{
+    const r = await ObserverAuth.recordVaultUnlock(1);
+    alert(r ? 'Vault 001 unlock recorded!' : 'Sign in first.');
+    updateUI();
+  });
+  document.getElementById('testCard').addEventListener('click', async ()=>{
+    const r = await ObserverAuth.claimRelicCard(1);
+    alert(r ? 'Relic Card 001 claimed!' : 'Sign in first.');
+    updateUI();
+  });
+}
+
+async function updateUI(){
+  const st = document.getElementById('status');
+  const em = document.getElementById('userEmail');
+  const so = document.getElementById('signOutBtn');
+  const pg = document.getElementById('progress');
+  if(ObserverAuth.user){
+    st.innerHTML = '<span class="on">● SIGNED IN</span>';
+    em.textContent = ObserverAuth.user.email;
+    so.style.display = '';
+    const p = await ObserverAuth.getProgress();
+    pg.innerHTML = `<b>Clearance:</b> ${p.clearance}\n<b>Vaults unlocked:</b> ${p.vaults.length}\n<b>Relic cards:</b> ${p.relicCards.length}\n<b>Discoveries:</b> ${p.discoveries.length}`;
+  } else {
+    st.innerHTML = '<span class="off">● NOT SIGNED IN</span>';
+    em.textContent = '';
+    so.style.display = 'none';
+    pg.textContent = 'Sign in to load your observer record.';
+  }
+}
+</script>
+</body>
+</html>

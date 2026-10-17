@@ -1,0 +1,77 @@
+<!-- NEORUINS Observer Auth Modal — include before </body> on any page with accounts -->
+<style>
+.obs-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.obs-modal-overlay.open{display:flex}
+.obs-modal{background:#0a0908;border:2px solid var(--gold,#c9a227);max-width:400px;width:90%;padding:36px 32px;text-align:center;box-shadow:0 0 40px rgba(201,162,39,.2)}
+.obs-modal h2{font-family:"Cormorant Garamond",serif;font-size:26px;letter-spacing:2px;color:var(--gold,#c9a227);margin-bottom:12px}
+.obs-modal p{font-size:11px;color:#a09a8c;line-height:1.9;margin-bottom:20px;font-family:"IBM Plex Mono",monospace}
+.obs-modal input{width:100%;background:#1a1510;border:1px solid #3d3226;color:#e8e0d0;font-family:"IBM Plex Mono",monospace;font-size:13px;padding:12px;margin-bottom:14px;outline:none}
+.obs-modal input:focus{border-color:var(--gold,#c9a227)}
+.obs-modal button{width:100%;background:var(--gold,#c9a227);color:#000;border:none;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:3px;font-weight:600;padding:14px;cursor:pointer;transition:.2s}
+.obs-modal button:hover{box-shadow:0 0 20px rgba(201,162,39,.4)}
+.obs-modal button:disabled{opacity:.5;cursor:wait}
+.obs-modal .close-link{display:block;margin-top:14px;font-size:10px;letter-spacing:2px;color:#a09a8c;cursor:pointer;font-family:"IBM Plex Mono",monospace}
+.obs-modal .close-link:hover{color:var(--gold,#c9a227)}
+.obs-modal .msg{font-size:11px;margin-top:12px;min-height:18px;font-family:"IBM Plex Mono",monospace}
+.obs-modal .msg.ok{color:#33ff66}
+.obs-modal .msg.err{color:#ff4444}
+.obs-btn{border:2px solid var(--gold,#c9a227);color:var(--gold,#c9a227);background:transparent;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:2px;padding:10px 20px;cursor:pointer;transition:.2s;text-decoration:none;display:inline-block}
+.obs-btn:hover{background:var(--gold,#c9a227);color:#000}
+.obs-btn.signed-in{border-color:#33ff66;color:#33ff66}
+.obs-btn.signed-in:hover{background:#33ff66;color:#000}
+</style>
+<div class="obs-modal-overlay" id="obsModal">
+  <div class="obs-modal">
+    <h2>OBSERVER ACCESS</h2>
+    <p>Enter your email. We'll send a secure sign-in link — no password needed.</p>
+    <input type="email" id="obsEmail" placeholder="observer@archive.net" autocomplete="email">
+    <button id="obsSendLink">SEND SIGN-IN LINK</button>
+    <div class="msg" id="obsMsg"></div>
+    <span class="close-link" id="obsClose">CANCEL</span>
+  </div>
+</div>
+<script>
+(function(){
+  const overlay = document.getElementById('obsModal');
+  const emailInput = document.getElementById('obsEmail');
+  const sendBtn = document.getElementById('obsSendLink');
+  const msg = document.getElementById('obsMsg');
+
+  window.ObserverModal = {
+    open(){ overlay.classList.add('open'); emailInput.focus(); },
+    close(){ overlay.classList.remove('open'); msg.textContent=''; msg.className='msg'; }
+  };
+  document.getElementById('obsClose').addEventListener('click', window.ObserverModal.close);
+  overlay.addEventListener('click', e => { if(e.target === overlay) window.ObserverModal.close(); });
+
+  sendBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    if(!email || !email.includes('@')){ msg.textContent='Enter a valid email.'; msg.className='msg err'; return; }
+    sendBtn.disabled = true; sendBtn.textContent = 'SENDING...';
+    const error = await ObserverAuth.signIn(email);
+    sendBtn.disabled = false; sendBtn.textContent = 'SEND SIGN-IN LINK';
+    if(error){ msg.textContent='Error: ' + error.message; msg.className='msg err'; }
+    else { msg.textContent='Check your email for the sign-in link.'; msg.className='msg ok'; }
+  });
+  emailInput.addEventListener('keydown', e => { if(e.key==='Enter') sendBtn.click(); });
+
+  // Refresh all auth buttons on state change
+  function refreshButtons(){
+    document.querySelectorAll('[data-obs-auth]').forEach(btn => {
+      if(ObserverAuth.user){
+        btn.textContent = 'SIGNED IN — ' + (ObserverAuth.user.email||'').split('@')[0].toUpperCase();
+        btn.classList.add('signed-in');
+        btn.onclick = async () => { await ObserverAuth.signOut(); };
+      } else {
+        btn.textContent = btn.getAttribute('data-obs-label') || 'OBSERVER SIGN IN';
+        btn.classList.remove('signed-in');
+        btn.onclick = () => window.ObserverModal.open();
+      }
+    });
+  }
+  document.addEventListener('observer-auth-change', refreshButtons);
+  // Run after auth init
+  const _origInit = ObserverAuth.init.bind(ObserverAuth);
+  ObserverAuth.init = async function(){ const u = await _origInit(); refreshButtons(); return u; };
+})();
+</script>
