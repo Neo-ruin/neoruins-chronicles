@@ -56,6 +56,8 @@ h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-
 .back-link a{color:var(--gold); text-decoration:none}
 .back-link a:hover{text-decoration:underline}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -193,6 +195,11 @@ function attemptUnlock() {
         clearInterval(interval);
         setTimeout(() => {
           msg.textContent = 'VAULT UNSEALED';
+          // Auto-save to observer account (silent if not signed in)
+          if (typeof ObserverAuth !== 'undefined' && ObserverAuth.user) {
+            ObserverAuth.recordVaultUnlock(1);
+            ObserverAuth.claimRelicCard(1);
+          }
           setTimeout(() => {
             lockscreen.style.display = 'none';
             vault.style.display = 'block';
@@ -225,6 +232,9 @@ input.addEventListener('keypress', (e) => {
 input.addEventListener('input', () => {
   input.value = input.value.toUpperCase();
 });
+</script>
+<script>
+if (typeof ObserverAuth !== 'undefined') ObserverAuth.init();
 </script>
 </body>
 </html>

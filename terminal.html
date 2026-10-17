@@ -56,6 +56,8 @@ footer{border-top:1px solid var(--line);padding:14px;text-align:center;font-size
 .try-label{text-align:center;font-size:10px;letter-spacing:3px;color:var(--dim);padding:14px 0 8px}
 @media(max-width:600px){.vault-corner{top:60px;right:12px;font-size:11px;padding:8px 14px}.terminal{height:75vh}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 </head>
 <body>
 <div class="crt"></div>
@@ -194,7 +196,13 @@ function run(raw){
     case 'read': case 'open': case 'cat':
       if(!arg){ print('<span class="line-red">Specify a file: read &lt;file&gt;</span>'); break; }
       const f = FILES[arg.toLowerCase()] || HIDDEN[arg.toLowerCase()];
-      if(f){ print(`<span class="line-gold">── ${esc(f.title)} ──</span>\n${esc(f.body)}`); }
+      if(f){
+        print(`<span class="line-gold">── ${esc(f.title)} ──</span>\n${esc(f.body)}`);
+        // Auto-record hidden discoveries to observer account
+        if (HIDDEN[arg.toLowerCase()] && typeof ObserverAuth !== 'undefined' && ObserverAuth.user) {
+          ObserverAuth.recordDiscovery(arg.toLowerCase());
+        }
+      }
       else { print(`<span class="line-red">Record not found or sealed: ${esc(arg)}</span>`); }
       break;
     case 'search': case 'find': case 'grep':
@@ -261,6 +269,9 @@ const bi = setInterval(()=>{
   if(i < boot.length){ print(boot[i]); i++; }
   else { clearInterval(bi); cmd.focus(); }
 }, 320);
+</script>
+<script>
+if (typeof ObserverAuth !== 'undefined') ObserverAuth.init();
 </script>
 </body>
 </html>
