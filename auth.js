@@ -47,8 +47,31 @@ const ObserverAuth = {
       .select('*')
       .eq('id', this.user.id)
       .single();
-    if (!error) this.profile = data;
+    if (!error) {
+      this.profile = data;
+    } else {
+      // Self-heal: create profile if the signup trigger missed it
+      const { data: created } = await _sb
+        .from('observer_profiles')
+        .upsert({ id: this.user.id }, { onConflict: 'id' })
+        .select()
+        .single();
+      if (created) this.profile = created;
+    }
     return this.profile;
+  },
+
+  async setCodename(codename) {
+    if (!this.user) return null;
+    const clean = codename.trim().toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,20);
+    if (!clean) return null;
+    const { data, error } = await _sb
+      .from('observer_profiles')
+      .upsert({ id: this.user.id, codename: clean }, { onConflict: 'id' })
+      .select()
+      .single();
+    if (!error) this.profile = data;
+    return error ? null : data;
   },
 
   // --- Progress tracking ---

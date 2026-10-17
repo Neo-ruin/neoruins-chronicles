@@ -121,10 +121,11 @@ async function boot(){
   render();
   document.addEventListener('observer-auth-change', render);
   document.getElementById('saveCodename').addEventListener('click', async ()=>{
-    const v = document.getElementById('codenameInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,20);
+    const v = document.getElementById('codenameInput').value;
     if(!v || !ObserverAuth.user) return;
-    const { error } = await ObserverAuth.client.from('observer_profiles').update({ codename: v }).eq('id', ObserverAuth.user.id);
-    if(!error){ await ObserverAuth.loadProfile(); render(); }
+    const saved = await ObserverAuth.setCodename(v);
+    if(saved){ document.getElementById('codenameInput').value=''; render(); }
+    else { document.getElementById('codenameInput').placeholder='Save failed — try again'; }
   });
 }
 
