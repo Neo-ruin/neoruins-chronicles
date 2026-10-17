@@ -84,9 +84,13 @@
   footer p{color:var(--dim); font-size:10px; letter-spacing:3px}
   .cursor{display:inline-block; width:8px; height:14px; background:var(--gold); vertical-align:-2px; animation:blink 1.1s infinite; margin-left:6px}
   @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.1}}
+
+  .vault-corner{position:fixed; top:18px; right:22px; z-index:100; background:rgba(10,9,8,.85); border:2px solid var(--gold); color:var(--gold); font-family:"IBM Plex Mono",monospace; font-size:15px; letter-spacing:3px; padding:12px 24px; cursor:pointer; text-decoration:none; display:inline-block; transition:.3s; backdrop-filter:blur(4px)}
+  .vault-corner:hover{background:var(--gold); color:#000; box-shadow:0 0 24px rgba(201,162,39,.5); transform:scale(1.05)}
 </style>
 </head>
 <body>
+<a href="vault.html" class="vault-corner">🔒 VAULT</a>
 
 <div id="boot"><div class="term" id="bootText"></div></div>
 
@@ -104,7 +108,6 @@
       <a href="artifacts.html">ARTIFACTS</a>
       <a href="about.html">ABOUT</a>
       <a href="index.html#signals">SIGNALS</a>
-      <a href="vault.html" style="border:1px solid var(--gold); padding:4px 12px; color:var(--gold);">🔒 VAULT</a>
     </nav>
   </div>
 </header>
