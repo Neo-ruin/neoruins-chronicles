@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESTRICTED // NEORUINS Archive</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"afc3ba4188dbed81c12aacc1bc44fab0"})});</script>
+<style>
+:root{
+  --bg:#0a0908; --panel:#1a1510; --ink:#e8e0d0; --dim:#a09a8c;
+  --gold:#c9a227; --amber:#ffb000; --cyan:#4de3ff; --line:#3d3226; --red:#ff4444;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg); color:var(--ink); font-family:"IBM Plex Mono",ui-monospace,monospace; line-height:1.7; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 20px}
+body::after{content:""; position:fixed; inset:0; pointer-events:none; z-index:90; background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px)}
+body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:91; background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%)}
+::selection{background:var(--gold); color:#000}
+.wrap{max-width:640px; width:100%; text-align:center; position:relative; z-index:1}
+.classification{font-size:11px; letter-spacing:6px; color:var(--red); border:1px solid var(--red); display:inline-block; padding:8px 20px; margin-bottom:30px; animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-weight:500; letter-spacing:3px; margin-bottom:10px; color:var(--ink)}
+.subtitle{font-size:12px; letter-spacing:3px; color:var(--dim); margin-bottom:50px}
+#lockscreen{}
+#vault{display:none}
+/* tumblers */
+.tumblers{display:flex; justify-content:center; gap:12px; margin:30px 0}
+.tumbler{width:52px; height:72px; border:1px solid var(--line); background:var(--panel); display:flex; align-items:center; justify-content:center; font-size:24px; color:var(--dim); position:relative; overflow:hidden; transition:.3s}
+.tumbler.locked{border-color:var(--gold); color:var(--gold); box-shadow:0 0 12px rgba(201,162,39,.3)}
+.tumbler .spin{animation:tumblerSpin .5s ease}
+@keyframes tumblerSpin{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+/* input */
+#pwInput{background:var(--panel); border:1px solid var(--line); color:var(--amber); font-family:inherit; font-size:18px; letter-spacing:8px; text-align:center; padding:14px 20px; width:280px; max-width:90%; outline:none; transition:.3s; text-transform:uppercase}
+#pwInput:focus{border-color:var(--gold); box-shadow:0 0 16px rgba(201,162,39,.2)}
+#unlockBtn{background:none; border:1px solid var(--gold); color:var(--gold); font-family:inherit; font-size:13px; letter-spacing:4px; padding:14px 40px; margin-top:20px; cursor:pointer; transition:.3s}
+#unlockBtn:hover{background:var(--gold); color:#000; box-shadow:0 0 20px rgba(201,162,39,.4)}
+#message{margin-top:20px; font-size:13px; letter-spacing:2px; min-height:24px}
+#message.error{color:var(--red)}
+#message.success{color:#7dd87d}
+.hint{margin-top:40px; font-size:11px; color:var(--dim); letter-spacing:1px; max-width:400px; margin-left:auto; margin-right:auto; line-height:2}
+/* vault contents */
+.vault-header{font-size:11px; letter-spacing:6px; color:#7dd87d; border:1px solid #7dd87d; display:inline-block; padding:8px 20px; margin-bottom:30px}
+.reward{border:1px solid var(--line); background:var(--panel); padding:30px; margin:20px 0; text-align:left}
+.reward h2{font-family:"Cormorant Garamond",serif; font-size:24px; color:var(--gold); margin-bottom:6px; letter-spacing:2px}
+.reward .label{font-size:10px; letter-spacing:4px; color:var(--dim); margin-bottom:16px}
+.reward p{font-size:13px; line-height:1.9; color:var(--ink)}
+.reward .classified{border-left:2px solid var(--red); padding-left:16px; margin:16px 0; font-size:13px}
+.discount-code{background:var(--bg); border:1px dashed var(--gold); padding:20px; text-align:center; margin:16px 0}
+.discount-code .code{font-size:28px; letter-spacing:6px; color:var(--amber); font-weight:500}
+.discount-code .desc{font-size:11px; color:var(--dim); letter-spacing:2px; margin-top:8px}
+.relic-card{border:2px solid var(--gold); background:linear-gradient(135deg,#1a1510 0%,#0a0908 100%); padding:30px; margin:16px 0; text-align:center; position:relative}
+.relic-card::before{content:"◈"; position:absolute; top:10px; left:15px; color:var(--gold); font-size:18px}
+.relic-card::after{content:"◈"; position:absolute; top:10px; right:15px; color:var(--gold); font-size:18px}
+.relic-card h3{font-family:"Cormorant Garamond",serif; font-size:22px; letter-spacing:3px; color:var(--ink); margin-bottom:4px}
+.relic-card .num{font-size:10px; letter-spacing:4px; color:var(--gold); margin-bottom:16px}
+.relic-card .details{font-size:12px; color:var(--dim); line-height:2; text-align:left; margin-top:16px}
+.relic-card .details b{color:var(--ink)}
+.next-clue{border:1px solid var(--cyan); padding:20px; margin:16px 0; font-size:13px; color:var(--cyan); letter-spacing:1px; line-height:2}
+.back-link{margin-top:40px; font-size:11px; letter-spacing:3px; color:var(--dim)}
+.back-link a{color:var(--gold); text-decoration:none}
+.back-link a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LOCK SCREEN -->
+<div id="lockscreen">
+  <div class="classification">RESTRICTED ARCHIVE</div>
+  <h1>VAULT 001</h1>
+  <div class="subtitle">AUTHORIZATION REQUIRED</div>
+
+  <div class="tumblers" id="tumblers">
+    <div class="tumbler" data-i="0">?</div>
+    <div class="tumbler" data-i="1">?</div>
+    <div class="tumbler" data-i="2">?</div>
+    <div class="tumbler" data-i="3">?</div>
+    <div class="tumbler" data-i="4">?</div>
+    <div class="tumbler" data-i="5">?</div>
+  </div>
+
+  <input type="text" id="pwInput" maxlength="6" placeholder="______" autocomplete="off" spellcheck="false">
+  <br>
+  <button id="unlockBtn">UNSEAL</button>
+  <div id="message"></div>
+
+  <div class="hint">
+    The archive does not give up its secrets easily.<br>
+    Follow the trail. The clues are already here,<br>
+    scattered across the open records.
+  </div>
+</div>
+
+<!-- VAULT CONTENTS -->
+<div id="vault">
+  <div class="vault-header">ACCESS GRANTED</div>
+  <h1>VAULT 001</h1>
+  <div class="subtitle">CONTENTS RECOVERED</div>
+
+  <!-- Archive File #001 -->
+  <div class="reward">
+    <div class="label">RECOVERED DOCUMENT</div>
+    <h2>Archive File #001</h2>
+    <div class="classified">
+      <p><b>EXPEDITION REPORT — STRUCTURE K</b></p>
+      <p>Filed: [DATE CORRUPTED]</p>
+      <p>Team: 6 researchers, 2 guides</p>
+      <br>
+      <p>We entered at dawn. The structure was not on any map. It should not have been there.</p>
+      <br>
+      <p>Interior walls bore markings in no known script. Dr. Amara identified 73 distinct glyph sequences before her equipment failed. All recordings from inside the structure contain a low-frequency signal beneath the ambient noise. Analysis ongoing.</p>
+      <br>
+      <p>At 14:32, all six researchers reported hearing their own voices calling from deeper within the structure. The guides heard nothing.</p>
+      <br>
+      <p>We evacuated at 14:35. Headcount confirmed: 8 entered, 8 departed.</p>
+      <br>
+      <p>Post-expedition review of entry logs shows 9 signatures.</p>
+      <br>
+      <p><i>[REMAINDER OF FILE CORRUPTED]</i></p>
+    </div>
+  </div>
+
+  <!-- Relic Card #001 -->
+  <div class="reward">
+    <div class="label">COLLECTIBLE ARTIFACT</div>
+    <h2>Relic Card #001</h2>
+    <div class="relic-card">
+      <h3>THE NINTH SIGNATURE</h3>
+      <div class="num">ARCHIVE RELIC 001 OF UNKNOWN TOTAL</div>
+      <div class="details">
+        <b>Classification:</b> Document Fragment<br>
+        <b>Recovery Site:</b> Structure K, [COORDINATES REDACTED]<br>
+        <b>Threat Level:</b> UNDETERMINED<br>
+        <b>Description:</b> A sign-in ledger bearing nine signatures from an eight-person expedition. The ninth signature matches no known team member. Ink analysis suggests it was written from the inside of the page.
+      </div>
+    </div>
+    <p style="font-size:11px; color:var(--dim); text-align:center; margin-top:10px;">Screenshot or save this card. More will surface.</p>
+  </div>
+
+  <!-- Discount Code -->
+  <div class="reward">
+    <div class="label">ARCHIVIST'S GRATITUDE</div>
+    <h2>Supply Requisition</h2>
+    <p>The archive provides for those who seek. Present this requisition code at the NEORUINS supply depot:</p>
+    <div class="discount-code">
+      <div class="code">VAULT001</div>
+      <div class="desc">15% OFF — SINGLE USE</div>
+    </div>
+    <p style="font-size:11px; color:var(--dim);">Redeem at neoruin-shop.fourthwall.com</p>
+  </div>
+
+  <!-- Next Vault Clue -->
+  <div class="reward">
+    <div class="label">FORWARD FRAGMENT</div>
+    <h2>The Trail Continues</h2>
+    <div class="next-clue">
+      "When the first vault empties, look to where the fallen are named.<br>
+      The map remembers what the archive forgot."
+    </div>
+    <p style="font-size:11px; color:var(--dim);">A new vault is being prepared. The clues are already being placed.</p>
+  </div>
+
+  <div class="back-link"><a href="index.html">← RETURN TO THE ARCHIVE</a></div>
+</div>
+
+</div>
+
+<script>
+const PASSWORD = "ECHO73";
+const input = document.getElementById('pwInput');
+const btn = document.getElementById('unlockBtn');
+const msg = document.getElementById('message');
+const tumblers = document.querySelectorAll('.tumbler');
+const lockscreen = document.getElementById('lockscreen');
+const vault = document.getElementById('vault');
+
+function attemptUnlock() {
+  const val = input.value.toUpperCase().trim();
+  msg.className = '';
+  msg.textContent = '';
+
+  if (val === PASSWORD) {
+    // Animate tumblers locking in one by one
+    msg.className = 'success';
+    msg.textContent = 'SEQUENCE ACCEPTED';
+    let i = 0;
+    const interval = setInterval(() => {
+      if (i < tumblers.length) {
+        const t = tumblers[i];
+        t.innerHTML = '<span class="spin">' + val[i] + '</span>';
+        t.classList.add('locked');
+        i++;
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          msg.textContent = 'VAULT UNSEALED';
+          setTimeout(() => {
+            lockscreen.style.display = 'none';
+            vault.style.display = 'block';
+            window.scrollTo(0, 0);
+          }, 800);
+        }, 400);
+      }
+    }, 350);
+  } else if (val.length === 0) {
+    msg.className = 'error';
+    msg.textContent = 'ENTER SEQUENCE';
+  } else {
+    // Wrong - shake tumblers
+    msg.className = 'error';
+    msg.textContent = 'ACCESS DENIED';
+    tumblers.forEach(t => {
+      t.style.transform = 'translateX(-4px)';
+      setTimeout(() => t.style.transform = 'translateX(4px)', 80);
+      setTimeout(() => t.style.transform = 'translateX(0)', 160);
+    });
+    input.value = '';
+  }
+}
+
+btn.addEventListener('click', attemptUnlock);
+input.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') attemptUnlock();
+});
+// Auto-uppercase
+input.addEventListener('input', () => {
+  input.value = input.value.toUpperCase();
+});
+</script>
+</body>
+</html>
