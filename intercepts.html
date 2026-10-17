@@ -53,6 +53,8 @@ h1{font-family:"Cormorant Garamond",serif;font-size:38px;letter-spacing:2px;marg
 footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
 @media(max-width:600px){.vault-corner{top:64px;right:12px;font-size:11px;padding:8px 14px}h1{font-size:28px}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 </head>
 <body>
 <a class="vault-corner" href="vault.html" target="_blank">🔒 VAULT</a>
@@ -141,5 +143,6 @@ footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size
   </div>
 </main>
 <footer>NEORUINS CHRONICLES — THE ARCHIVE REMEMBERS</footer>
+<script>if(typeof ObserverAuth!=='undefined')ObserverAuth.init();</script>
 </body>
 </html>
