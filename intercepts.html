@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Intercepts // NEORUINS CHRONICLES</title>
+<meta name="description" content="A living record of recovered transmissions. New fragments surface regularly. The archive is listening.">
+<meta property="og:title" content="Signal Intercepts // NEORUINS CHRONICLES">
+<meta property="og:description" content="Recovered broadcasts, decoded fragments, and signals of unknown origin. Updated as the archive recovers more.">
+<meta property="og:url" content="https://neoruins.com/intercepts.html">
+<meta property="og:image" content="https://neoruins.com/archive-hall.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://tracker.metricool.com/resources/be.js"></script>
+<script>beTracker.t({hash:"afc3ba4188dbed81c12aacc1bc44fab0"})</script>
+<style>
+:root{--bg:#0a0908;--panel:#1a1510;--ink:#e8e0d0;--dim:#a09a8c;--gold:#c9a227;--amber:#ffb000;--cyan:#4de3ff;--line:#3d3226;--green:#33ff66;--red:#ff4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Mono",monospace;min-height:100vh;display:flex;flex-direction:column}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)}
+.vault-corner{position:fixed;top:18px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
+header{border-bottom:1px solid var(--line);padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:"Cormorant Garamond",serif;font-size:22px;letter-spacing:4px;color:var(--gold);text-decoration:none}
+.nav{font-size:11px;letter-spacing:2px}
+.nav a{color:var(--dim);text-decoration:none;margin-left:18px}
+.nav a:hover{color:var(--gold)}
+main{flex:1;max-width:760px;width:100%;margin:0 auto;padding:40px 20px}
+.kicker{font-size:11px;letter-spacing:4px;color:var(--gold);margin-bottom:12px}
+h1{font-family:"Cormorant Garamond",serif;font-size:38px;letter-spacing:2px;margin-bottom:8px}
+.sub{color:var(--dim);font-size:13px;line-height:1.8;margin-bottom:36px}
+.sub b{color:var(--ink)}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:8px;animation:blink 1.6s steps(1) infinite}
+@keyframes blink{50%{opacity:.2}}
+.entry{border:1px solid var(--line);background:var(--panel);margin-bottom:22px;position:relative}
+.entry-head{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:8px}
+.sig-id{font-size:11px;letter-spacing:2px;color:var(--cyan)}
+.sig-date{font-size:11px;letter-spacing:1px;color:var(--dim)}
+.badge{font-size:10px;letter-spacing:2px;padding:4px 10px;border:1px solid}
+.badge.decoded{color:var(--green);border-color:var(--green)}
+.badge.partial{color:var(--amber);border-color:var(--amber)}
+.badge.corrupted{color:var(--red);border-color:var(--red)}
+.entry-body{padding:20px 18px;font-size:13.5px;line-height:2;white-space:pre-wrap}
+.entry-body .corrupt{color:var(--red)}
+.entry-foot{padding:10px 18px;border-top:1px solid var(--line);font-size:10px;letter-spacing:2px;color:var(--dim)}
+.cta{border:1px solid var(--gold);padding:28px;text-align:center;margin-top:36px;background:linear-gradient(135deg,rgba(201,162,39,.06),transparent)}
+.cta h2{font-family:"Cormorant Garamond",serif;font-size:24px;letter-spacing:2px;color:var(--gold);margin-bottom:10px}
+.cta p{font-size:12px;color:var(--dim);line-height:1.9;margin-bottom:18px}
+.cta a{display:inline-block;border:2px solid var(--gold);color:var(--gold);text-decoration:none;font-size:12px;letter-spacing:3px;padding:12px 28px;transition:.3s}
+.cta a:hover{background:var(--gold);color:#000}
+footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
+@media(max-width:600px){.vault-corner{top:64px;right:12px;font-size:11px;padding:8px 14px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<a class="vault-corner" href="vault.html" target="_blank">🔒 VAULT</a>
+<header>
+  <a class="brand" href="index.html">NEORUINS</a>
+  <nav class="nav"><a href="index.html">ARCHIVE</a><a href="terminal.html">TERMINAL</a><a href="about.html">ABOUT</a></nav>
+</header>
+<main>
+  <div class="kicker"><span class="live-dot"></span>LIVING RECORD</div>
+  <h1>Signal Intercepts</h1>
+  <p class="sub">Recovered broadcasts, decoded fragments, and signals of unknown origin.<br>
+  New entries surface as the archive recovers them. <b>Check back — the archive is always listening.</b></p>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="sig-id">SIG-2026-1017-C</span>
+      <span class="badge partial">PARTIAL DECODE</span>
+      <span class="sig-date">OCT 17, 2026</span>
+    </div>
+    <div class="entry-body">>> SIGNAL ACQUIRED — ORIGIN UNKNOWN
+>> TRIANGULATION: INCONCLUSIVE
+
+  ...static... then, for eleven seconds, a voice
+  counting backwards from nine. At zero, silence.
+
+  No known language matches the cadence.
+  <span class="corrupt">[47% OF TRANSMISSION UNRECOVERABLE]</span></div>
+    <div class="entry-foot">RECOVERED BY AUTOMATED SWEEP // FLAGGED FOR REVIEW</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="sig-id">SIG-2026-1016-A</span>
+      <span class="badge decoded">DECODED</span>
+      <span class="sig-date">OCT 16, 2026</span>
+    </div>
+    <div class="entry-body">>> SIGNAL ACQUIRED — ORIGIN UNKNOWN
+>> PARTIAL DECODE:
+
+  ...the roads cross the void and the map
+  remembers what the archive forgot...
+
+>> END OF FRAGMENT</div>
+    <div class="entry-foot">RECOVERED BY AUTOMATED SWEEP // ARCHIVED</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="sig-id">SIG-2026-1014-F</span>
+      <span class="badge corrupted">CORRUPTED</span>
+      <span class="sig-date">OCT 14, 2026</span>
+    </div>
+    <div class="entry-body">>> SIGNAL ACQUIRED
+>> DECODE ATTEMPTED — <span class="corrupt">FAILED</span>
+
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+  ▓▓ ARCHIVE INTEGRITY HOLDING ▓▓
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+  The fragment resisted every decode method.
+  It will be tried again when the archive learns more.</div>
+    <div class="entry-foot">QUARANTINED // RE-ATTEMPT SCHEDULED</div>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <span class="sig-id">SIG-2026-1012-B</span>
+      <span class="badge decoded">DECODED</span>
+      <span class="sig-date">OCT 12, 2026</span>
+    </div>
+    <div class="entry-body">>> REPEATER SIGNAL — LOW ORBIT
+>> SOURCE: UNREGISTERED RELAY
+
+  ...if you are receiving this, the archive
+  is larger than the map. The map is larger
+  than the territory. Do not trust the territory.
+
+  ...repeats every 73 minutes. It has not stopped.</div>
+    <div class="entry-foot">RECOVERED BY AUTOMATED SWEEP // UNDER OBSERVATION</div>
+  </div>
+
+  <div class="cta">
+    <h2>Become an Archive Observer</h2>
+    <p>Observers receive recovered fragments, classified notices,<br>and early word of new discoveries — before they surface here.</p>
+    <a href="https://neoruins.kit.com/b5efa3523b" target="_blank" rel="noopener">ENTER THE ARCHIVE</a>
+  </div>
+</main>
+<footer>NEORUINS CHRONICLES — THE ARCHIVE REMEMBERS</footer>
+</body>
+</html>
