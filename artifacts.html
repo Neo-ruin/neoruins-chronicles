@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"afc3ba4188dbed81c12aacc1bc44fab0"})});</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artifact Vault // NEORUINS CHRONICLES</title>
@@ -88,11 +89,14 @@
   footer p{color:var(--dim); font-size:10px; letter-spacing:3px}
   .cursor{display:inline-block; width:8px; height:14px; background:var(--gold); vertical-align:-2px; animation:blink 1.1s infinite; margin-left:6px}
   @keyframes blink{0%,60%{opacity:1}61%,100%{opacity:.1}}
+.vault-corner{position:fixed;bottom:22px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 </head>
 <body>
+<a class="vault-corner" href="vault.html" target="_blank">🔒 VAULT</a>
 
 <div id="boot"><div class="term" id="bootText"></div></div>
 
@@ -127,15 +131,7 @@
 
 <div class="vault">
   <div class="grid">
-  <a class="card" href="https://neoruin-shop.fourthwall.com/products/neoruins-founder-edition-hoodie-the-first-relic" target="_blank" rel="noopener">
-    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/DsBa2Pd0vEigbERYnC-3eSIwUpOqt123NpejaW0atvk/w:1920/sm:1/enc/LtcF12DqooGvLTmV/zq_u4N7bD986oIg3/rDfcJW-R-6g1EM91/ltIEW5vtQbgeZ0nE/uMf9d_xgVWhbLmMk/vpJPXquOARzdJqwb/JAHLYDd7hOQAHj4k/Vj3f9PJm_EhzDxc0/gktUiN6UR34Pte12/loggiBWekAsOhAua/o7oI3CIF_5tgIPl1/r368WKloH46R7D_r/D-_feh9AI6bC6klO/g2zgEES2qfPQJfc0/pUjjQNvqUCo.webp" alt="NEORUINS Founder Edition Hoodie — The First Relic" loading="lazy"><span class="ptag">PHYSICAL RELIC</span></div>
-    <div class="cbody">
-      <div class="pname serif">NEORUINS Founder Edition Hoodie — The First Relic</div>
-      <div class="pdesc">The first official artifact from the NEORUINS universe. A limited first-chapter release created for those who entered at the beginning. Built for gamers, creato</div>
-      <div class="prow"><span class="price">$89.99–$93.99</span><span class="claim">CLAIM →</span></div>
-    </div>
-  </a>
-  <a class="card" href="https://neoruin-shop.fourthwall.com/products/archive-architect-sigil-art-print" target="_blank" rel="noopener">
+    <a class="card" href="https://neoruin-shop.fourthwall.com/products/archive-architect-sigil-art-print" target="_blank" rel="noopener">
     <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/jadc0Uw1mR7i7tmhe1Osn32hwddzZsF6rqHUtNzov6Q/w:1920/sm:1/enc/TIraNEf_0rFitIOy/zadNrZp2k9jn-5ON/838O5J41o_4zx3cB/lNDX7qvCqTvCKqM2/NZPYzs_uf9_WcaHe/MSMMB92h4bY06EgU/b7NIFex1zcE74p0W/1q73sNVUdbFer7pY/zjTySkcJPSPzlLfo/pJPozm4BUILRVmN_/qUHKGKPVA_vwrXSQ/NXG-rwcVN0BCIED3/o8BdfirP7wznA5ZU/mALL0A.webp" alt="ARCHIVE ARCHITECT — Sigil Art Print" loading="lazy"><span class="ptag">DIGITAL RELIC</span></div>
     <div class="cbody">
       <div class="pname serif">ARCHIVE ARCHITECT — Sigil Art Print</div>
@@ -149,14 +145,6 @@
       <div class="pname serif">Archive Social Content Kit</div>
       <div class="pdesc">A reusable social media design kit featuring eight cinematic cyber-fantasy backgrounds for announcements, product launches, quotes, livestreams, drops, and comm</div>
       <div class="prow"><span class="price">$4.99</span><span class="claim">CLAIM →</span></div>
-    </div>
-  </a>
-  <a class="card" href="https://neoruin-shop.fourthwall.com/products/complete-archive-architect-collection" target="_blank" rel="noopener">
-    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/Ht-3doXoO56qxCwP9EKmM3r9m4qPPU7GOxUWG7uDriE/w:1920/sm:1/enc/cPEgNgXGV2zufbuT/Muy5b2AP4exrE9Vi/YnAZLUqUUFpLUVEJ/kpknRcL-0kuxJyGT/qWc8DClOv7SEq3M5/qaotoFfAG7WgMtSg/-UrtkDN4DqxpZ8lh/NP0bj6OkDAsYujse/bp4hnGB23-VBqPZz/idD455oDjtY8Khp8/VecaPR66CUXx5h8W/stsbjGIs3mFF8A3W/avN5BA0h7Qjgzubn/oCJxVQ.webp" alt="COMPLETE ARCHIVE ARCHITECT COLLECTION" loading="lazy"><span class="ptag">DIGITAL RELIC</span></div>
-    <div class="cbody">
-      <div class="pname serif">COMPLETE ARCHIVE ARCHITECT COLLECTION</div>
-      <div class="pdesc">The complete public NEORUINS digital collection: cinematic wallpaper artwork, the Archive Architect Sigil, and the upgraded RELIC 001 Archive Card. A recovered </div>
-      <div class="prow"><span class="price">$9.99</span><span class="claim">CLAIM →</span></div>
     </div>
   </a>
   <a class="card" href="https://neoruin-shop.fourthwall.com/products/creator-launch-content-template-pack" target="_blank" rel="noopener">
@@ -200,7 +188,7 @@
     </div>
   </a>
   <a class="card" href="https://neoruin-shop.fourthwall.com/products/neoruins-founders-edition-poster-the-ruins-awaken" target="_blank" rel="noopener">
-    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/fRBZ_7un_cBgjLwmjn23s3ILveaCRhlq5Gwl6AWJJkY/w:1920/sm:1/enc/_ymf4U3j9SOz15E_/HapBa9RE6u72W2GE/jW2JHOlLq5wUau9G/bOFLmlDQPXWEZsnA/gxWUipG6ltnXEho6/BBOYmYC-1pxamYr1/Z35aZbumBM_GQ0sW/1rPa0DaSroJl24FF/-EELBOItG5v-cJ-p/wSa1tuph2o59DOoV/hYMhBvXWwTswCbWZ/jico3t0s5JWCNVA4/eNY_qwDhzem7YK5V/QW8eHm7oo0-TT_cY/zx_XM6aZH9w.webp" alt="NEORUINS Founders Edition Poster — &quot;The Ruins Awaken&quot;" loading="lazy"><span class="ptag">PHYSICAL RELIC</span></div>
+    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/fRBZ_7un_cBgjLwmjn23s3ILveaCRhlq5Gwl6AWJJkY/w:1920/sm:1/enc/_ymf4U3j9SOz15E_/HapBa9RE6u72W2GE/jW2JHOlLq5wUau9G/bOFLmlDQPXWEZsnA/gxWUipG6ltnXEho6/BBOYmYC-1pxamYr1/Z35aZbumBM_GQ0sW/1rPa0DaSroJl24FF/-EELBOItG5v-cJ-p/wSa1tuph2o59DOoV/hYMhBvXWwTswCbWZ/jico3t0s5JWCNVA4/eNY_qwDhzem7YK5V/QW8eHm7oo0-TT_cY/zx_XM6aZH9w.webp" alt="NEORUINS Founders Edition Poster — &quot;The Ruins Awaken&quot;" loading="lazy"><span class="ptag">DIGITAL RELIC</span></div>
     <div class="cbody">
       <div class="pname serif">NEORUINS Founders Edition Poster — &quot;The Ruins Awaken&quot;</div>
       <div class="pdesc">Recovered from the Archive: the official NEORUINS Founders Edition emblem, set against the ruined cathedral where the first Signal stirred. This is the mark of </div>
@@ -208,7 +196,7 @@
     </div>
   </a>
   <a class="card" href="https://neoruin-shop.fourthwall.com/products/neoruins-relic-002-poster-map-of-the-fallen-realms" target="_blank" rel="noopener">
-    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/0CCz9JDtgTQPWcUEXTAh4lOZr5eA6IGuWYgmaA9NTuY/w:1920/sm:1/enc/72qhORcimI4-r-WP/x7Hmvl7rehPG8aHQ/lN_jlXlRGrzsRpNp/9vFY3S77V6gdGpmx/aDjrm4oeDDWoXCSc/wXRhqyVKJSSAYUGk/rH6baoWdWApgQWs5/thJeYHhDoa_iICrG/wguVyTdgJTwqfdEC/oztTx7pYyX4Xi7z8/Dq7XvOUB-YtWlxId/hUjFi_4NwaJmyj04/IPMinGVVQeyH-Npt/_PKMaPqI8AUfaJF8/5bivLCpeCLA.webp" alt="NEORUINS Relic 002 Poster — &quot;Map of the Fallen Realms&quot;" loading="lazy"><span class="ptag">PHYSICAL RELIC</span></div>
+    <div class="imgwrap"><img src="https://imgproxy.fourthwall.dev/0CCz9JDtgTQPWcUEXTAh4lOZr5eA6IGuWYgmaA9NTuY/w:1920/sm:1/enc/72qhORcimI4-r-WP/x7Hmvl7rehPG8aHQ/lN_jlXlRGrzsRpNp/9vFY3S77V6gdGpmx/aDjrm4oeDDWoXCSc/wXRhqyVKJSSAYUGk/rH6baoWdWApgQWs5/thJeYHhDoa_iICrG/wguVyTdgJTwqfdEC/oztTx7pYyX4Xi7z8/Dq7XvOUB-YtWlxId/hUjFi_4NwaJmyj04/IPMinGVVQeyH-Npt/_PKMaPqI8AUfaJF8/5bivLCpeCLA.webp" alt="NEORUINS Relic 002 Poster — &quot;Map of the Fallen Realms&quot;" loading="lazy"><span class="ptag">DIGITAL RELIC</span></div>
     <div class="cbody">
       <div class="pname serif">NEORUINS Relic 002 Poster — &quot;Map of the Fallen Realms&quot;</div>
       <div class="pdesc">The map was not drawn for us. Recovered from the Archive, printed for your wall. Recovered from the deep layers: the cartographic record of the Fallen Realms, m</div>
@@ -236,7 +224,7 @@
 <script>
   const lines = [
     "> OPENING ARTIFACT VAULT ......... <span class='ok'>OK</span>",
-    "> 12 RELICS INDEXED ............... <span class='ok'>OK</span>"
+    "> 10 RELICS INDEXED ............... <span class='ok'>OK</span>"
   ];
   const bt = document.getElementById('bootText');
   let li = 0;
