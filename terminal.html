@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive Terminal // NEORUINS CHRONICLES</title>
+<meta name="description" content="Direct interface to the NEORUINS archive. Query records, read recovered files, probe for what the index doesn't list.">
+<meta property="og:title" content="Archive Terminal // NEORUINS CHRONICLES">
+<meta property="og:description" content="Direct interface to the archive. Some files are redacted. Some aren't listed at all.">
+<meta property="og:url" content="https://neoruins.com/terminal.html">
+<meta property="og:image" content="https://neoruins.com/archive-hall.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://tracker.metricool.com/resources/be.js"></script>
+<script>beTracker.t({hash:"afc3ba4188dbed81c12aacc1bc44fab0"})</script>
+<style>
+:root{--bg:#0a0908;--panel:#1a1510;--ink:#e8e0d0;--dim:#a09a8c;--gold:#c9a227;--amber:#ffb000;--cyan:#4de3ff;--line:#3d3226;--green:#33ff66;--red:#ff4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Mono",monospace;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px)}
+.crt{position:fixed;inset:0;pointer-events:none;z-index:51;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45) 100%)}
+header{border-bottom:1px solid var(--line);padding:14px 22px;display:flex;justify-content:space-between;align-items:center;background:rgba(10,9,8,.9)}
+.brand{font-family:"Cormorant Garamond",serif;font-size:20px;letter-spacing:4px;color:var(--gold);text-decoration:none}
+.nav{font-size:11px;letter-spacing:2px}
+.nav a{color:var(--dim);text-decoration:none;margin-left:18px}
+.nav a:hover{color:var(--gold)}
+.vault-corner{position:fixed;top:64px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:13px;letter-spacing:3px;padding:10px 20px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
+main{flex:1;display:flex;justify-content:center;padding:30px 16px}
+.terminal{width:100%;max-width:860px;background:#050403;border:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.8),inset 0 0 60px rgba(201,162,39,.03);display:flex;flex-direction:column;height:70vh;min-height:480px}
+.term-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+.dot{width:11px;height:11px;border-radius:50%}
+.term-title{margin-left:10px;font-size:11px;letter-spacing:3px;color:var(--dim)}
+#output{flex:1;overflow-y:auto;padding:18px;font-size:13.5px;line-height:1.7;white-space:pre-wrap;word-wrap:break-word}
+#output::-webkit-scrollbar{width:8px}
+#output::-webkit-scrollbar-track{background:#050403}
+#output::-webkit-scrollbar-thumb{background:var(--line)}
+.input-row{display:flex;align-items:center;padding:12px 18px;border-top:1px solid var(--line);background:#070605}
+.prompt{color:var(--green);margin-right:10px;white-space:nowrap;font-size:13.5px}
+#cmd{background:transparent;border:none;outline:none;color:var(--ink);font-family:inherit;font-size:13.5px;flex:1;caret-color:var(--green)}
+.line-dim{color:var(--dim)}
+.line-gold{color:var(--gold)}
+.line-green{color:var(--green)}
+.line-red{color:var(--red)}
+.line-cyan{color:var(--cyan)}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+footer{border-top:1px solid var(--line);padding:14px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
+.hint-bar{text-align:center;font-size:11px;color:var(--dim);letter-spacing:1px;padding:10px}
+.hint-bar b{color:var(--gold)}
+.try-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 16px 18px}
+.try-chip{background:var(--panel);border:1px solid var(--line);color:var(--green);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:1px;padding:8px 14px;cursor:pointer;transition:.2s}
+.try-chip:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 12px rgba(201,162,39,.3)}
+.try-label{text-align:center;font-size:10px;letter-spacing:3px;color:var(--dim);padding:14px 0 8px}
+@media(max-width:600px){.vault-corner{top:60px;right:12px;font-size:11px;padding:8px 14px}.terminal{height:75vh}}
+</style>
+</head>
+<body>
+<div class="crt"></div>
+<a class="vault-corner" href="vault.html" target="_blank">🔒 VAULT</a>
+<header>
+  <a class="brand" href="index.html">NEORUINS</a>
+  <nav class="nav"><a href="index.html">ARCHIVE</a><a href="about.html">ABOUT</a><a href="artifacts.html">ARTIFACTS</a></nav>
+</header>
+<main>
+  <div class="terminal">
+    <div class="term-head">
+      <span class="dot" style="background:#ff5f57"></span>
+      <span class="dot" style="background:#febc2e"></span>
+      <span class="dot" style="background:#28c840"></span>
+      <span class="term-title">ARCHIVE TERMINAL — RESTRICTED INTERFACE</span>
+    </div>
+    <div id="output"></div>
+    <div class="input-row">
+      <span class="prompt">archivist@neoruins:~$</span>
+      <input id="cmd" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Terminal command input">
+    </div>
+  </div>
+</main>
+<div class="hint-bar">Type <b>help</b> to begin. Not everything in the archive is listed.</div>
+<div class="try-label">— TRY A COMMAND —</div>
+<div class="try-row">
+  <button class="try-chip" data-cmd="read manifest.txt">read manifest.txt</button>
+  <button class="try-chip" data-cmd="read expedition-k.txt">read expedition-k.txt</button>
+  <button class="try-chip" data-cmd="search relic">search relic</button>
+  <button class="try-chip" data-cmd="status">status</button>
+  <button class="try-chip" data-cmd="whoami">whoami</button>
+</div>
+<footer>NEORUINS CHRONICLES — THE ARCHIVE REMEMBERS</footer>
+<script>
+const out = document.getElementById('output');
+const cmd = document.getElementById('cmd');
+
+const FILES = {
+  'manifest.txt': {title:'ARCHIVE MANIFEST', body:
+`NEORUINS CHRONICLES — MASTER INDEX
+Clearance: OBSERVER
+
+Available records:
+  expedition-k.txt ..... Field report, recovery site K
+  transmission-001.txt . Recovered broadcast fragment
+  relic-index.txt ...... Known relic records
+  notice.txt ........... Archivist's notice
+
+[4 of 4 listed records shown]
+[1 record withheld — insufficient clearance]`},
+  'expedition-k.txt': {title:'FIELD REPORT — RECOVERY SITE K', body:
+`EXPEDITION REPORT — STRUCTURE K
+Filed by: Dr. Amara, expedition lead
+
+Team: 6 researchers, 2 guides. Entry 09:14.
+Interior mapped to 400m. Glyph sequences logged: 73 distinct.
+
+14:32 — All researchers report hearing their own voices
+         calling from deeper inside the structure.
+14:35 — Evacuation ordered. Headcount: 8 in, 8 out.
+
+Entry log shows 9 signatures.
+
+[REMAINDER OF FILE CORRUPTED]`},
+  'transmission-001.txt': {title:'RECOVERED BROADCAST FRAGMENT', body:
+`>> SIGNAL ACQUIRED — ORIGIN UNKNOWN
+>> PARTIAL DECODE:
+
+  ...the roads cross the void and the map
+  remembers what the archive forgot...
+
+>> END OF FRAGMENT
+>> 61% of transmission unrecoverable.`},
+  'relic-index.txt': {title:'KNOWN RELIC RECORDS', body:
+`RELIC 001 — STATUS: RECOVERED
+  Record: /relic-001.html
+  Classification: ARTIFACT
+
+RELIC 002 — STATUS: RECOVERED
+  Record: /relic-002.html
+  Classification: MAP FRAGMENT
+
+RELIC 003 — STATUS: [NOT YET RECOVERED]
+RELIC 004 — STATUS: [NOT YET RECOVERED]
+  ...
+[Further entries sealed]`},
+  'notice.txt': {title:"ARCHIVIST'S NOTICE", body:
+`To all observers:
+
+The archive grows when you return.
+Some records surface only after repeated visits.
+Some doors open only for those who look twice.
+
+— The Archivist`}
+};
+
+const HIDDEN = {
+  'vault.key': {title:'WITHHELD RECORD', body:
+`You found what isn't listed.
+
+The vault does not open for commands.
+It opens for those who follow the trail.
+
+Three clues. The open archive. You know where to look.`}
+};
+
+function print(html){ out.innerHTML += html + '\n'; out.scrollTop = out.scrollHeight; }
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+function run(raw){
+  const parts = raw.trim().split(/\s+/);
+  const c = (parts[0]||'').toLowerCase();
+  const arg = parts.slice(1).join(' ');
+  print('<span class="line-green">archivist@neoruins:~$</span> ' + esc(raw));
+  switch(c){
+    case '': break;
+    case 'help':
+      print(`Available commands:
+  <span class="line-gold">help</span>              Show this list
+  <span class="line-gold">ls</span>                List archive records
+  <span class="line-gold">read &lt;file&gt;</span>       Open a record (e.g. read manifest.txt)
+  <span class="line-gold">search &lt;term&gt;</span>     Search record contents
+  <span class="line-gold">status</span>            Archive system status
+  <span class="line-gold">whoami</span>            Identify the current observer
+  <span class="line-gold">clear</span>             Clear the terminal
+  <span class="line-gold">exit</span>              Return to the archive`);
+      break;
+    case 'ls': case 'dir':
+      print(`<span class="line-dim">Archive records (clearance: OBSERVER):</span>
+  manifest.txt
+  expedition-k.txt
+  transmission-001.txt
+  relic-index.txt
+  notice.txt`);
+      break;
+    case 'read': case 'open': case 'cat':
+      if(!arg){ print('<span class="line-red">Specify a file: read &lt;file&gt;</span>'); break; }
+      const f = FILES[arg.toLowerCase()] || HIDDEN[arg.toLowerCase()];
+      if(f){ print(`<span class="line-gold">── ${esc(f.title)} ──</span>\n${esc(f.body)}`); }
+      else { print(`<span class="line-red">Record not found or sealed: ${esc(arg)}</span>`); }
+      break;
+    case 'search': case 'find': case 'grep':
+      if(!arg){ print('<span class="line-red">Specify a term: search &lt;term&gt;</span>'); break; }
+      const t = arg.toLowerCase(); let hits = [];
+      for(const [name, f] of Object.entries({...FILES, ...HIDDEN})){
+        if((f.title + ' ' + f.body).toLowerCase().includes(t)) hits.push(name);
+      }
+      print(hits.length ? `<span class="line-dim">Matches for "${esc(arg)}":</span>\n  ` + hits.join('\n  ')
+        : `<span class="line-dim">No records match "${esc(arg)}".</span>\n<span class="line-dim">Some records are not indexed.</span>`);
+      break;
+    case 'status':
+      print(`ARCHIVE STATUS
+  Integrity ......... <span class="line-green">STABLE</span>
+  Records indexed ... 5
+  Records sealed .... <span class="line-gold">[CLASSIFIED]</span>
+  Corruption level .. 2.1% <span class="line-dim">(nominal)</span>
+  Last sync ......... today, 06:54 ET`);
+      break;
+    case 'whoami':
+      print(`observer — clearance: <span class="line-gold">OBSERVER</span>\n<span class="line-dim">Higher clearances are earned, not granted.</span>`);
+      break;
+    case 'clear': case 'cls':
+      out.innerHTML = ''; break;
+    case 'exit': case 'quit': case 'logout':
+      print('<span class="line-dim">Closing terminal...</span>');
+      setTimeout(()=>{ window.location.href = 'index.html'; }, 800);
+      break;
+    case 'vault': case 'unlock': case 'open-sesame':
+      print(`<span class="line-gold">The vault does not answer to commands.</span>\n<span class="line-dim">Follow the trail. Three clues, hidden in the open.</span>`);
+      break;
+    default:
+      print(`<span class="line-red">Unknown command: ${esc(c)}</span> <span class="line-dim">— type help</span>`);
+  }
+}
+
+cmd.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){ const v = cmd.value; cmd.value = ''; run(v); }
+});
+document.querySelector('.terminal').addEventListener('click', ()=> cmd.focus());
+
+// Example command chips
+document.querySelectorAll('.try-chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    const c = chip.getAttribute('data-cmd');
+    cmd.value = ''; run(c);
+    document.querySelector('.terminal').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+});
+
+// Boot sequence
+const boot = [
+  '<span class="line-dim">NEORUINS ARCHIVE TERMINAL v2.1</span>',
+  '<span class="line-dim">Establishing secure connection...</span>',
+  '<span class="line-green">CONNECTION SECURE</span>',
+  '<span class="line-dim">Verifying observer clearance...</span>',
+  '<span class="line-gold">CLEARANCE: OBSERVER</span>',
+  '<span class="line-dim">Loading indexed records...</span>',
+  '',
+  'Type <span class="line-gold">help</span> to begin.'
+];
+let i = 0;
+const bi = setInterval(()=>{
+  if(i < boot.length){ print(boot[i]); i++; }
+  else { clearInterval(bi); cmd.focus(); }
+}, 320);
+</script>
+</body>
+</html>
