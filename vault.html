@@ -24,6 +24,15 @@ body::before{content:""; position:fixed; inset:0; pointer-events:none; z-index:9
 h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-weight:500; letter-spacing:3px; margin-bottom:10px; color:var(--ink)}
 .subtitle{font-size:12px; letter-spacing:3px; color:var(--dim); margin-bottom:50px}
 #lockscreen{}
+.observer-entice{margin-top:28px;border:1px solid var(--line);background:rgba(201,162,39,.05);padding:20px;max-width:520px;margin-left:auto;margin-right:auto}
+.observer-entice.signed{border-color:var(--green, #33ff66)}
+.entice-inner{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.entice-icon{color:var(--gold);font-size:20px}
+.observer-entice p{font-size:11px;color:var(--dim);line-height:2;letter-spacing:.5px}
+.observer-entice p b{color:var(--ink)}
+.entice-btn{border:2px solid var(--gold);color:var(--gold);background:transparent;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:3px;padding:12px 28px;cursor:pointer;transition:.2s}
+.entice-btn:hover{background:var(--gold);color:#000}
+.entice-btn.signed-in{border-color:var(--green, #33ff66);color:var(--green, #33ff66)}
 #vault{display:none}
 /* tumblers */
 .tumblers{display:flex; justify-content:center; gap:12px; margin:30px 0}
@@ -87,6 +96,20 @@ h1{font-family:"Cormorant Garamond",serif; font-size:clamp(28px,5vw,42px); font-
     One waits in the footer. One sleeps in Chapter I.<br>
     One lingers at the end of the Eras.<br>
     Find all three. Assemble the sequence.
+  </div>
+
+  <div class="observer-entice" id="observerEntice" style="display:none">
+    <div class="entice-inner">
+      <span class="entice-icon">◈</span>
+      <p><b>Observers:</b> sign in and everything you recover is saved to your collection — vaults, relic cards, discoveries — on every device.</p>
+      <button class="entice-btn" data-obs-auth data-obs-label="SIGN IN TO SAVE">SIGN IN TO SAVE</button>
+    </div>
+  </div>
+  <div class="observer-entice signed" id="observerSigned" style="display:none">
+    <div class="entice-inner">
+      <span class="entice-icon">◈</span>
+      <p>You're signed in. Everything you recover will be <b>saved to your collection</b> automatically.</p>
+    </div>
   </div>
 </div>
 
@@ -233,8 +256,30 @@ input.addEventListener('input', () => {
   input.value = input.value.toUpperCase();
 });
 </script>
+<div id="modalRoot"></div>
 <script>
 if (typeof ObserverAuth !== 'undefined') ObserverAuth.init();
+</script>
+<script>
+fetch('auth-modal.html').then(r=>r.text()).then(html=>{
+  document.getElementById('modalRoot').innerHTML = html;
+  const s = document.createElement('script');
+  s.textContent = html.split('<script>')[1].split('</'+'script>')[0];
+  document.body.appendChild(s);
+  updateEntice();
+});
+function updateEntice(){
+  const entice = document.getElementById('observerEntice');
+  const signed = document.getElementById('observerSigned');
+  if(typeof ObserverAuth !== 'undefined' && ObserverAuth.user){
+    entice.style.display = 'none'; signed.style.display = '';
+  } else {
+    entice.style.display = ''; signed.style.display = 'none';
+  }
+}
+document.addEventListener('observer-auth-change', updateEntice);
+// Check again after a delay in case modal loads after auth
+setTimeout(updateEntice, 2000);
 </script>
 </body>
 </html>
