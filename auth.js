@@ -94,3 +94,90 @@ const ObserverAuth = {
     };
   }
 };
+
+// --- Auto-inject sign-in button + modal on every page ---
+ObserverAuth._modalHTML = `
+<div class="obs-modal-overlay" id="obsModal" style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+  <div class="obs-modal" style="background:#0a0908;border:2px solid #c9a227;max-width:400px;width:90%;padding:36px 32px;text-align:center;box-shadow:0 0 40px rgba(201,162,39,.2)">
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:2px;color:#c9a227;margin-bottom:12px">OBSERVER ACCESS</h2>
+    <p style="font-size:11px;color:#a09a8c;line-height:1.9;margin-bottom:20px;font-family:'IBM Plex Mono',monospace">Enter your email. We\'ll send a secure sign-in link — no password needed.</p>
+    <input type="email" id="obsEmail" placeholder="observer@archive.net" autocomplete="email" style="width:100%;background:#1a1510;border:1px solid #3d3226;color:#e8e0d0;font-family:'IBM Plex Mono',monospace;font-size:13px;padding:12px;margin-bottom:14px;outline:none">
+    <button id="obsSendLink" style="width:100%;background:#c9a227;color:#000;border:none;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:3px;font-weight:600;padding:14px;cursor:pointer">SEND SIGN-IN LINK</button>
+    <div class="msg" id="obsMsg" style="font-size:11px;margin-top:12px;min-height:18px;font-family:'IBM Plex Mono',monospace"></div>
+    <span class="close-link" id="obsClose" style="display:block;margin-top:14px;font-size:10px;letter-spacing:2px;color:#a09a8c;cursor:pointer;font-family:'IBM Plex Mono',monospace">CANCEL</span>
+  </div>
+</div>`;
+
+ObserverAuth._injectUI = function(){
+  if(document.getElementById('obsModal')) return;
+  const div = document.createElement('div');
+  div.innerHTML = this._modalHTML;
+  document.body.appendChild(div.firstElementChild);
+
+  // Modal controls
+  const overlay = document.getElementById('obsModal');
+  const emailInput = document.getElementById('obsEmail');
+  const sendBtn = document.getElementById('obsSendLink');
+  const msg = document.getElementById('obsMsg');
+  window.ObserverModal = {
+    open(){ overlay.style.display='flex'; emailInput.focus(); },
+    close(){ overlay.style.display='none'; msg.textContent=''; }
+  };
+  document.getElementById('obsClose').addEventListener('click', window.ObserverModal.close);
+  overlay.addEventListener('click', e => { if(e.target === overlay) window.ObserverModal.close(); });
+  sendBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    if(!email || !email.includes('@')){ msg.textContent='Enter a valid email.'; msg.style.color='#ff4444'; return; }
+    sendBtn.disabled = true; sendBtn.textContent = 'SENDING...';
+    const error = await ObserverAuth.signIn(email);
+    sendBtn.disabled = false; sendBtn.textContent = 'SEND SIGN-IN LINK';
+    if(error){ msg.textContent='Error: ' + error.message; msg.style.color='#ff4444'; }
+    else { msg.textContent='Check your email for the sign-in link.'; msg.style.color='#33ff66'; }
+  });
+  emailInput.addEventListener('keydown', e => { if(e.key==='Enter') sendBtn.click(); });
+
+  // Nav button — append to first <nav>, or header
+  if(!document.querySelector('[data-obs-auth]')){
+    const btn = document.createElement('a');
+    btn.setAttribute('data-obs-auth','');
+    btn.setAttribute('data-obs-label','SIGN IN');
+    btn.href = '#';
+    btn.style.cssText = 'border:1px solid #c9a227;color:#c9a227;font-size:10px;letter-spacing:2px;padding:8px 14px;cursor:pointer;text-decoration:none;white-space:nowrap';
+    btn.addEventListener('click', e => { e.preventDefault(); });
+    const nav = document.querySelector('nav');
+    if(nav) nav.appendChild(btn);
+    else { const h = document.querySelector('header'); if(h) h.appendChild(btn); }
+  }
+  this._refreshButtons();
+};
+
+ObserverAuth._displayName = function(){
+  if(this.profile && this.profile.codename) return this.profile.codename;
+  if(this.user && this.user.email) return this.user.email.split('@')[0].toUpperCase();
+  return 'OBSERVER';
+};
+
+ObserverAuth._refreshButtons = function(){
+  document.querySelectorAll('[data-obs-auth]').forEach(btn => {
+    if(this.user){
+      btn.textContent = '◈ ' + this._displayName();
+      btn.style.borderColor = '#33ff66'; btn.style.color = '#33ff66';
+      btn.onclick = async (e) => { e.preventDefault(); await this.signOut(); };
+    } else {
+      btn.textContent = btn.getAttribute('data-obs-label') || 'SIGN IN';
+      btn.style.borderColor = '#c9a227'; btn.style.color = '#c9a227';
+      btn.onclick = (e) => { e.preventDefault(); window.ObserverModal.open(); };
+    }
+  });
+};
+
+// Wrap init to inject UI
+(function(){
+  const _origInit = ObserverAuth.init.bind(ObserverAuth);
+  ObserverAuth.init = async function(){
+    const u = await _origInit();
+    try { ObserverAuth._injectUI(); } catch(e){}
+    return u;
+  };
+  document.addEventListener('observer-auth-change', ()=>{ try{ ObserverAuth._refreshButtons(); }catch(e){} });
+})();
