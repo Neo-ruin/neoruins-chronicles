@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Observer Collection // NEORUINS CHRONICLES</title>
+<meta name="description" content="Your recovered archive — vault unlocks, relic cards, and discoveries, saved across every device.">
+<meta property="og:title" content="Observer Collection // NEORUINS CHRONICLES">
+<meta property="og:url" content="https://neoruins.com/collection.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="https://tracker.metricool.com/resources/be.js"></script>
+<script>beTracker.t({hash:"afc3ba4188dbed81c12aacc1bc44fab0"})</script>
+<style>
+:root{--bg:#0a0908;--panel:#1a1510;--ink:#e8e0d0;--dim:#a09a8c;--gold:#c9a227;--line:#3d3226;--green:#33ff66}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Mono",monospace;min-height:100vh;display:flex;flex-direction:column}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)}
+.vault-corner{position:fixed;top:18px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
+header{border-bottom:1px solid var(--line);padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-family:"Cormorant Garamond",serif;font-size:22px;letter-spacing:4px;color:var(--gold);text-decoration:none}
+.nav{font-size:11px;letter-spacing:2px}
+.nav a{color:var(--dim);text-decoration:none;margin-left:18px}
+.nav a:hover{color:var(--gold)}
+main{flex:1;max-width:760px;width:100%;margin:0 auto;padding:48px 20px}
+.kicker{font-size:11px;letter-spacing:4px;color:var(--gold);margin-bottom:12px}
+h1{font-family:"Cormorant Garamond",serif;font-size:38px;letter-spacing:2px;margin-bottom:8px}
+.sub{color:var(--dim);font-size:12px;line-height:1.9;margin-bottom:36px}
+#signin-prompt{border:1px solid var(--line);background:var(--panel);padding:40px;text-align:center}
+#signin-prompt h2{font-family:"Cormorant Garamond",serif;font-size:24px;color:var(--gold);letter-spacing:2px;margin-bottom:12px}
+#signin-prompt p{font-size:12px;color:var(--dim);line-height:2;margin-bottom:20px}
+#collection{display:none}
+.id-card{border:2px solid var(--gold);background:linear-gradient(135deg,rgba(201,162,39,.08),transparent);padding:28px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.id-card .who .codename{font-family:"Cormorant Garamond",serif;font-size:28px;letter-spacing:3px;color:var(--gold)}
+.id-card .who .email{font-size:11px;color:var(--dim);margin-top:6px}
+.id-card .clearance{text-align:right}
+.id-card .clearance .lvl{font-size:10px;letter-spacing:3px;color:var(--dim)}
+.id-card .clearance .rank{font-size:20px;letter-spacing:2px;color:var(--green);margin-top:4px}
+.section{margin-bottom:32px}
+.section h2{font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.item{border:1px solid var(--line);background:var(--panel);padding:16px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.item .name{font-size:13px}
+.item .name b{color:var(--gold)}
+.item .date{font-size:10px;color:var(--dim);letter-spacing:1px}
+.empty{font-size:12px;color:var(--dim);line-height:2;border:1px dashed var(--line);padding:20px;text-align:center}
+.empty a{color:var(--gold)}
+.codename-row{display:flex;gap:10px;margin-top:12px}
+.codename-row input{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--ink);font-family:inherit;font-size:12px;padding:10px;outline:none}
+.codename-row input:focus{border-color:var(--gold)}
+.codename-row button{border:1px solid var(--gold);color:var(--gold);background:transparent;font-family:inherit;font-size:11px;letter-spacing:2px;padding:10px 18px;cursor:pointer}
+.codename-row button:hover{background:var(--gold);color:#000}
+footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
+@media(max-width:600px){.vault-corner{top:64px;right:12px;font-size:11px;padding:8px 14px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<a class="vault-corner" href="vault.html" target="_blank">🔒 VAULT</a>
+<header>
+  <a class="brand" href="index.html">NEORUINS</a>
+  <nav class="nav"><a href="index.html">ARCHIVE</a><a href="terminal.html">TERMINAL</a><a href="leaderboard.html">LEADERBOARD</a><a href="about.html">ABOUT</a></nav>
+</header>
+<main>
+  <div class="kicker">OBSERVER RECORD</div>
+  <h1>Your Collection</h1>
+  <p class="sub">Everything you've recovered, saved to your account.<br>Available on every device, wherever you sign in.</p>
+
+  <div id="signin-prompt">
+    <h2>Sign In Required</h2>
+    <p>Your collection lives in your observer account.<br>Sign in to view your recovered archive.</p>
+    <button class="obs-btn" data-obs-auth data-obs-label="OBSERVER SIGN IN" style="border:2px solid var(--gold);color:var(--gold);background:transparent;font-family:inherit;font-size:12px;letter-spacing:3px;padding:14px 32px;cursor:pointer">OBSERVER SIGN IN</button>
+  </div>
+
+  <div id="collection">
+    <div class="id-card">
+      <div class="who">
+        <div class="codename" id="codename">—</div>
+        <div class="email" id="obsEmail"></div>
+        <div class="codename-row">
+          <input id="codenameInput" maxlength="20" placeholder="Set your codename">
+          <button id="saveCodename">SAVE</button>
+        </div>
+      </div>
+      <div class="clearance">
+        <div class="lvl">CLEARANCE</div>
+        <div class="rank" id="clearance">OBSERVER</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>VAULTS UNLOCKED</h2>
+      <div id="vaultList"></div>
+    </div>
+    <div class="section">
+      <h2>RELIC CARDS</h2>
+      <div id="relicList"></div>
+    </div>
+    <div class="section">
+      <h2>TERMINAL DISCOVERIES</h2>
+      <div id="discList"></div>
+    </div>
+  </div>
+</main>
+<footer>NEORUINS CHRONICLES — THE ARCHIVE REMEMBERS</footer>
+<div id="modalRoot"></div>
+<script>
+fetch('auth-modal.html').then(r=>r.text()).then(html=>{
+  document.getElementById('modalRoot').innerHTML = html;
+  const s = document.createElement('script');
+  s.textContent = html.split('<script>')[1].split('</'+'script>')[0];
+  document.body.appendChild(s);
+  boot();
+});
+
+async function boot(){
+  await ObserverAuth.init();
+  render();
+  document.addEventListener('observer-auth-change', render);
+  document.getElementById('saveCodename').addEventListener('click', async ()=>{
+    const v = document.getElementById('codenameInput').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g,'').slice(0,20);
+    if(!v || !ObserverAuth.user) return;
+    const { error } = await ObserverAuth.client.from('observer_profiles').update({ codename: v }).eq('id', ObserverAuth.user.id);
+    if(!error){ await ObserverAuth.loadProfile(); render(); }
+  });
+}
+
+async function render(){
+  const signedIn = !!ObserverAuth.user;
+  document.getElementById('signin-prompt').style.display = signedIn ? 'none' : '';
+  document.getElementById('collection').style.display = signedIn ? '' : 'none';
+  if(!signedIn) return;
+  const p = await ObserverAuth.getProgress();
+  document.getElementById('codename').textContent = ObserverAuth.profile?.codename || '—';
+  document.getElementById('obsEmail').textContent = ObserverAuth.user.email;
+  document.getElementById('clearance').textContent = p.clearance;
+
+  const vl = document.getElementById('vaultList');
+  vl.innerHTML = p.vaults.length ? p.vaults.map(v=>
+    `<div class="item"><span class="name"><b>VAULT ${String(v.vault_number).padStart(3,'0')}</b> — Unsealed</span><span class="date">${new Date(v.unlocked_at).toLocaleDateString()}</span></div>`
+  ).join('') : `<div class="empty">No vaults unlocked yet.<br><a href="vault.html" target="_blank">The vault awaits.</a></div>`;
+
+  const rl = document.getElementById('relicList');
+  rl.innerHTML = p.relicCards.length ? p.relicCards.map(r=>
+    `<div class="item"><span class="name"><b>RELIC CARD ${String(r.relic_number).padStart(3,'0')}</b></span><span class="date">${new Date(r.claimed_at).toLocaleDateString()}</span></div>`
+  ).join('') : `<div class="empty">No relic cards claimed yet.</div>`;
+
+  const dl = document.getElementById('discList');
+  dl.innerHTML = p.discoveries.length ? p.discoveries.map(d=>
+    `<div class="item"><span class="name">${d.discovery}</span><span class="date">${new Date(d.discovered_at).toLocaleDateString()}</span></div>`
+  ).join('') : `<div class="empty">No hidden discoveries yet.<br><a href="terminal.html">Probe the terminal.</a></div>`;
+}
+</script>
+</body>
+</html>
