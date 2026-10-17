@@ -50,6 +50,10 @@ main{flex:1;display:flex;justify-content:center;padding:30px 16px}
 footer{border-top:1px solid var(--line);padding:14px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
 .hint-bar{text-align:center;font-size:11px;color:var(--dim);letter-spacing:1px;padding:10px}
 .hint-bar b{color:var(--gold)}
+.try-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:0 16px 18px}
+.try-chip{background:var(--panel);border:1px solid var(--line);color:var(--green);font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:1px;padding:8px 14px;cursor:pointer;transition:.2s}
+.try-chip:hover{border-color:var(--gold);color:var(--gold);box-shadow:0 0 12px rgba(201,162,39,.3)}
+.try-label{text-align:center;font-size:10px;letter-spacing:3px;color:var(--dim);padding:14px 0 8px}
 @media(max-width:600px){.vault-corner{top:60px;right:12px;font-size:11px;padding:8px 14px}.terminal{height:75vh}}
 </style>
 </head>
@@ -76,6 +80,14 @@ footer{border-top:1px solid var(--line);padding:14px;text-align:center;font-size
   </div>
 </main>
 <div class="hint-bar">Type <b>help</b> to begin. Not everything in the archive is listed.</div>
+<div class="try-label">— TRY A COMMAND —</div>
+<div class="try-row">
+  <button class="try-chip" data-cmd="read manifest.txt">read manifest.txt</button>
+  <button class="try-chip" data-cmd="read expedition-k.txt">read expedition-k.txt</button>
+  <button class="try-chip" data-cmd="search relic">search relic</button>
+  <button class="try-chip" data-cmd="status">status</button>
+  <button class="try-chip" data-cmd="whoami">whoami</button>
+</div>
 <footer>NEORUINS CHRONICLES — THE ARCHIVE REMEMBERS</footer>
 <script>
 const out = document.getElementById('output');
@@ -223,6 +235,15 @@ cmd.addEventListener('keydown', e => {
   if(e.key === 'Enter'){ const v = cmd.value; cmd.value = ''; run(v); }
 });
 document.querySelector('.terminal').addEventListener('click', ()=> cmd.focus());
+
+// Example command chips
+document.querySelectorAll('.try-chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    const c = chip.getAttribute('data-cmd');
+    cmd.value = ''; run(c);
+    document.querySelector('.terminal').scrollIntoView({behavior:'smooth', block:'center'});
+  });
+});
 
 // Boot sequence
 const boot = [
