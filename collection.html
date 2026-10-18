@@ -49,7 +49,7 @@ h1{font-family:"Cormorant Garamond",serif;font-size:38px;letter-spacing:2px;marg
 .item.open .item-detail{display:block}
 .item .expand-hint{font-size:9px;letter-spacing:2px;color:var(--dim);margin-left:8px}
 .item-detail img.relic-full{max-width:320px;width:100%;border:1px solid var(--gold);display:block;margin-bottom:12px}
-.item-detail .dl-link{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:2px;padding:8px 16px;text-decoration:none;margin-top:4px}
+.dl-link{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:2px;padding:8px 16px;text-decoration:none;margin-top:4px}
 .item-detail .doc-title{color:var(--gold);letter-spacing:2px;font-size:12px;margin-bottom:8px}
 .item .name{font-size:13px}
 .item .name b{color:var(--gold)}
@@ -102,6 +102,10 @@ footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size
     </div>
 
     <div class="section">
+      <h2>WEEKLY CHALLENGE</h2>
+      <div id="challengeBox"></div>
+    </div>
+    <div class="section">
       <h2>VAULTS UNLOCKED</h2>
       <div id="vaultList"></div>
     </div>
@@ -151,6 +155,7 @@ async function render(){
   document.getElementById('obsEmail').textContent = ObserverAuth.user.email;
   document.getElementById('clearance').textContent = p.clearance;
   document.getElementById('score').textContent = p.score;
+  renderChallenge();
 
   const vl = document.getElementById('vaultList');
   vl.innerHTML = p.vaults.length ? p.vaults.map(v=>{
@@ -178,6 +183,34 @@ async function render(){
       : `<span style="color:var(--dim)">Record sealed.</span>`;
     return `<div class="item" onclick="this.classList.toggle('open')"><div class="item-head"><span class="name">${escHtml(d.discovery)}<span class="expand-hint">▸ VIEW</span></span><span class="date">${new Date(d.discovered_at).toLocaleDateString()}</span></div><div class="item-detail" onclick="event.stopPropagation()">${detail}</div></div>`;
   }).join('') : `<div class="empty">No hidden discoveries yet.<br><a href="terminal.html">Probe the terminal.</a></div>`;
+}
+
+async function renderChallenge(){
+  const el = document.getElementById('challengeBox');
+  if(!el) return;
+  const sb = ObserverAuth.client;
+  if(!ObserverAuth.user || !sb){ el.innerHTML=''; return; }
+  try{
+    const { data: challenges } = await sb.from('weekly_challenges').select('id, challenge_key, title, reward_points').eq('active', true).limit(1);
+    const ch = challenges && challenges[0];
+    if(!ch){ el.innerHTML = `<div class="empty">No active challenge this week.<br>Check back soon.</div>`; return; }
+    const { data: claims } = await sb.from('observer_weekly_claims').select('id').eq('challenge_id', ch.id).eq('user_id', ObserverAuth.user.id).limit(1);
+    const claimed = claims && claims.length > 0;
+    if(claimed){
+      el.innerHTML = `<div class="item"><div class="item-head"><span class="name"><b>${escHtml(ch.title)}</b> — <span style="color:var(--green)">CLAIMED ✓</span></span><span class="date">+${ch.reward_points} PTS</span></div></div>`;
+    } else {
+      el.innerHTML = `<div class="item"><div class="item-head"><span class="name"><b>${escHtml(ch.title)}</b></span><span class="date">+${ch.reward_points} PTS</span></div><div style="margin-top:12px"><button class="dl-link" id="claimBtn">MARK COMPLETE & CLAIM</button><div style="font-size:11px;color:var(--dim);margin-top:8px">Complete the challenge above, then claim your points. One claim per observer.</div></div></div>`;
+      document.getElementById('claimBtn').addEventListener('click', async ()=>{
+        const btn = document.getElementById('claimBtn');
+        btn.disabled = true; btn.textContent = 'CLAIMING…';
+        const { error } = await sb.from('observer_weekly_claims').insert({ challenge_id: ch.id, user_id: ObserverAuth.user.id });
+        if(error){ btn.disabled = false; btn.textContent = 'MARK COMPLETE & CLAIM'; alert('Claim failed: ' + error.message); return; }
+        render();
+      });
+    }
+  }catch(e){
+    el.innerHTML = `<div class="empty">Challenge feed unavailable.</div>`;
+  }
 }
 
 function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
