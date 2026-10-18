@@ -43,7 +43,14 @@ h1{font-family:"Cormorant Garamond",serif;font-size:38px;letter-spacing:2px;marg
 .id-card .clearance .rank{font-size:20px;letter-spacing:2px;color:var(--green);margin-top:4px}
 .section{margin-bottom:32px}
 .section h2{font-size:12px;letter-spacing:3px;color:var(--gold);margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
-.item{border:1px solid var(--line);background:var(--panel);padding:16px 18px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.item{border:1px solid var(--line);background:var(--panel);padding:16px 18px;margin-bottom:10px;cursor:pointer}
+.item .item-head{display:flex;justify-content:space-between;align-items:center}
+.item .item-detail{display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(201,162,39,.25);font-size:13px;line-height:1.8;color:var(--cream);white-space:pre-line;cursor:default}
+.item.open .item-detail{display:block}
+.item .expand-hint{font-size:9px;letter-spacing:2px;color:var(--dim);margin-left:8px}
+.item-detail img.relic-full{max-width:320px;width:100%;border:1px solid var(--gold);display:block;margin-bottom:12px}
+.item-detail .dl-link{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:2px;padding:8px 16px;text-decoration:none;margin-top:4px}
+.item-detail .doc-title{color:var(--gold);letter-spacing:2px;font-size:12px;margin-bottom:8px}
 .item .name{font-size:13px}
 .item .name b{color:var(--gold)}
 .item .date{font-size:10px;color:var(--dim);letter-spacing:1px}
@@ -89,6 +96,8 @@ footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size
       <div class="clearance">
         <div class="lvl">CLEARANCE</div>
         <div class="rank" id="clearance">OBSERVER</div>
+        <div class="lvl" style="margin-top:14px">SCORE</div>
+        <div class="rank" id="score">0</div>
       </div>
     </div>
 
@@ -141,22 +150,66 @@ async function render(){
   document.getElementById('codename').textContent = ObserverAuth.profile?.codename || '—';
   document.getElementById('obsEmail').textContent = ObserverAuth.user.email;
   document.getElementById('clearance').textContent = p.clearance;
+  document.getElementById('score').textContent = p.score;
 
   const vl = document.getElementById('vaultList');
-  vl.innerHTML = p.vaults.length ? p.vaults.map(v=>
-    `<div class="item"><span class="name"><b>VAULT ${String(v.vault_number).padStart(3,'0')}</b> — Unsealed</span><span class="date">${new Date(v.unlocked_at).toLocaleDateString()}</span></div>`
-  ).join('') : `<div class="empty">No vaults unlocked yet.<br><a href="vault.html" target="_blank">The vault awaits.</a></div>`;
+  vl.innerHTML = p.vaults.length ? p.vaults.map(v=>{
+    const n = v.vault_number;
+    const detail = VAULT_FILES[n]
+      ? `<div class="doc-title">${VAULT_FILES[n].title}</div>${escHtml(VAULT_FILES[n].body)}`
+      : `<span style="color:var(--dim)">Archive record pending.</span>`;
+    return `<div class="item" onclick="this.classList.toggle('open')"><div class="item-head"><span class="name"><b>VAULT ${String(n).padStart(3,'0')}</b> — Unsealed<span class="expand-hint">▸ VIEW</span></span><span class="date">${new Date(v.unlocked_at).toLocaleDateString()}</span></div><div class="item-detail" onclick="event.stopPropagation()">${detail}</div></div>`;
+  }).join('') : `<div class="empty">No vaults unlocked yet.<br><a href="vault.html" target="_blank">The vault awaits.</a></div>`;
 
   const rl = document.getElementById('relicList');
-  rl.innerHTML = p.relicCards.length ? p.relicCards.map(r=>
-    `<div class="item"><span class="name"><b>RELIC CARD ${String(r.relic_number).padStart(3,'0')}</b></span><span class="date">${new Date(r.claimed_at).toLocaleDateString()}</span></div>`
-  ).join('') : `<div class="empty">No relic cards claimed yet.</div>`;
+  rl.innerHTML = p.relicCards.length ? p.relicCards.map(r=>{
+    const n = r.relic_number;
+    const detail = n === 1
+      ? `<img class="relic-full" src="relic-card-001.jpg" alt="Relic Card #001"><a class="dl-link" href="relic-card-001.jpg" download="neoruins-relic-card-001.jpg">DOWNLOAD CARD</a>`
+      : `<span style="color:var(--dim)">Card image pending.</span>`;
+    return `<div class="item" onclick="this.classList.toggle('open')"><div class="item-head"><span class="name"><b>RELIC CARD ${String(n).padStart(3,'0')}</b><span class="expand-hint">▸ VIEW</span></span><span class="date">${new Date(r.claimed_at).toLocaleDateString()}</span></div><div class="item-detail" onclick="event.stopPropagation()">${detail}</div></div>`;
+  }).join('') : `<div class="empty">No relic cards claimed yet.</div>`;
 
   const dl = document.getElementById('discList');
-  dl.innerHTML = p.discoveries.length ? p.discoveries.map(d=>
-    `<div class="item"><span class="name">${d.discovery}</span><span class="date">${new Date(d.discovered_at).toLocaleDateString()}</span></div>`
-  ).join('') : `<div class="empty">No hidden discoveries yet.<br><a href="terminal.html">Probe the terminal.</a></div>`;
+  dl.innerHTML = p.discoveries.length ? p.discoveries.map(d=>{
+    const c = DISCOVERY_CONTENT[d.discovery];
+    const detail = c
+      ? `<div class="doc-title">${escHtml(c.title)}</div>${escHtml(c.body)}`
+      : `<span style="color:var(--dim)">Record sealed.</span>`;
+    return `<div class="item" onclick="this.classList.toggle('open')"><div class="item-head"><span class="name">${escHtml(d.discovery)}<span class="expand-hint">▸ VIEW</span></span><span class="date">${new Date(d.discovered_at).toLocaleDateString()}</span></div><div class="item-detail" onclick="event.stopPropagation()">${detail}</div></div>`;
+  }).join('') : `<div class="empty">No hidden discoveries yet.<br><a href="terminal.html">Probe the terminal.</a></div>`;
 }
+
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const VAULT_FILES = {
+  1: { title: 'ARCHIVE FILE #001 — RECOVERED DOCUMENT', body:
+`EXPEDITION REPORT — STRUCTURE K
+Filed: [DATE CORRUPTED]
+Team: 6 researchers, 2 guides
+
+We entered at dawn. The structure was not on any map. It should not have been there.
+
+Interior walls bore markings in no known script. Dr. Amara identified 73 distinct glyph sequences before her equipment failed. All recordings from inside the structure contain a low-frequency signal beneath the ambient noise. Analysis ongoing.
+
+At 14:32, all six researchers reported hearing their own voices calling from deeper within the structure. The guides heard nothing.
+
+We evacuated at 14:35. Headcount confirmed: 8 entered, 8 departed.
+
+Post-expedition review of entry logs shows 9 signatures.
+
+[REMAINDER OF FILE CORRUPTED]` }
+};
+
+const DISCOVERY_CONTENT = {
+  'vault.key': { title: 'WITHHELD RECORD', body:
+`You found what isn't listed.
+
+The vault does not open for commands.
+It opens for those who follow the trail.
+
+Three clues. The open archive. You know where to look.` }
+};
 </script>
 </body>
 </html>

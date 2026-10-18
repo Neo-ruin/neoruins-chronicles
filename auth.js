@@ -105,13 +105,17 @@ const ObserverAuth = {
 
   async getProgress() {
     if (!this.user) return null;
-    const [vaults, cards, discoveries] = await Promise.all([
+    const progP = _sb.from('observer_progress_view').select('score, earned_clearance').eq('id', this.user.id).single()
+      .then(r => r.data).catch(() => null);
+    const [vaults, cards, discoveries, prog] = await Promise.all([
       _sb.from('vault_unlocks').select('vault_number, unlocked_at').eq('user_id', this.user.id),
       _sb.from('relic_cards').select('relic_number, claimed_at').eq('user_id', this.user.id),
       _sb.from('terminal_discoveries').select('discovery, discovered_at').eq('user_id', this.user.id),
+      progP,
     ]);
     return {
-      clearance: this.profile?.clearance || 'OBSERVER',
+      clearance: prog?.earned_clearance || this.profile?.clearance || 'OBSERVER',
+      score: prog?.score ?? 0,
       vaults: vaults.data || [],
       relicCards: cards.data || [],
       discoveries: discoveries.data || [],
