@@ -134,7 +134,7 @@ async function boot(){
 async function render(){
   const signedIn = !!ObserverAuth.user;
   document.getElementById('signin-prompt').style.display = signedIn ? 'none' : '';
-  document.getElementById('collection').style.display = signedIn ? '' : 'none';
+  document.getElementById('collection').style.display = signedIn ? 'block' : 'none';
   if(!signedIn) return;
   const p = await ObserverAuth.getProgress();
   document.getElementById('codename').textContent = ObserverAuth.profile?.codename || '—';
