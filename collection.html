@@ -127,7 +127,7 @@ async function boot(){
     if(!v || !ObserverAuth.user) return;
     const saved = await ObserverAuth.setCodename(v);
     if(saved){ document.getElementById('codenameInput').value=''; render(); }
-    else { document.getElementById('codenameInput').placeholder='Save failed — try again'; }
+    else { var m=ObserverAuth._lastCodenameError||'Save failed — try again'; document.getElementById('codenameInput').placeholder=m; document.getElementById('codenameInput').title=m; }
   });
 }
 

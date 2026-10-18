@@ -70,6 +70,7 @@ const ObserverAuth = {
       .upsert({ id: this.user.id, codename: clean }, { onConflict: 'id' })
       .select()
       .single();
+    this._lastCodenameError = error ? (error.message || String(error)) : null;
     if (!error) this.profile = data;
     return error ? null : data;
   },
