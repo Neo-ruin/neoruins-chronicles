@@ -209,3 +209,80 @@ ObserverAuth._refreshButtons = function(){
   };
   document.addEventListener('observer-auth-change', ()=>{ try{ ObserverAuth._refreshButtons(); }catch(e){} });
 })();
+
+// --- Grouped navigation (audit fix 2026-10-19): organize the header nav into dropdown groups ---
+// Runs after the auth UI injection. Purely presentational: if it fails, the nav stays flat.
+(function(){
+  var READ    = ['ARCHIVE','CHAPTER I','CHAPTER II','ERAS','AWAKENING','GLOSSARY','ABOUT'];
+  var SIGNALS = ['TRANSMISSIONS','TERMINAL','INTERCEPTS','SIGNALS'];
+  var OBSERVE = ['COLLECTION','LEADERBOARD'];
+
+  function injectNavCSS(){
+    if(document.getElementById('navGroupCSS')) return;
+    var s = document.createElement('style');
+    s.id = 'navGroupCSS';
+    s.textContent = [
+      '@media(min-width:821px){',
+      'header nav .nav-group{position:relative;display:inline-block}',
+      'header nav .nav-top{margin-left:20px;font-size:11px;letter-spacing:2px;color:var(--dim,#a09a8c);cursor:default;white-space:nowrap}',
+      'header nav .nav-group:hover .nav-top{color:var(--gold,#c9a227)}',
+      'header nav .nav-drop{display:none;position:absolute;top:100%;left:0;background:rgba(6,5,4,.97);border:1px solid var(--line,#3d3226);min-width:200px;z-index:90}',
+      'header nav .nav-group:hover .nav-drop{display:block}',
+      'header nav .nav-drop a{display:block;margin:0;padding:12px 18px;font-size:11px;letter-spacing:2px;color:var(--dim,#a09a8c);border-bottom:1px solid rgba(61,50,38,.4);white-space:nowrap}',
+      'header nav .nav-drop a:last-child{border-bottom:none}',
+      'header nav .nav-drop a:hover{color:var(--gold,#c9a227)}',
+      '}',
+      '@media(max-width:820px){',
+      'header nav .nav-top{display:block;margin:0;padding:14px 24px 4px;font-size:10px;letter-spacing:3px;color:var(--gold,#c9a227);opacity:.75}',
+      'header nav .nav-drop a{padding-left:38px}',
+      '}'
+    ].join('\n');
+    document.head.appendChild(s);
+  }
+
+  function groupNav(){
+    try{
+      var nav = document.querySelector('header nav') || document.querySelector('nav');
+      if(!nav || nav.querySelector('.nav-group')) return;
+      var links = Array.prototype.filter.call(nav.children, function(el){ return el.tagName === 'A'; });
+      if(links.length < 6) return; // small navs stay flat
+      var used = {};
+      function key(a){ return 'k' + links.indexOf(a); }
+      function txt(a){ return (a.textContent || '').trim().toUpperCase(); }
+      function pick(list){
+        return links.filter(function(a){
+          if(used[key(a)]) return false;
+          if(a.matches('[data-obs-auth]')) return false;
+          return list.indexOf(txt(a)) !== -1;
+        });
+      }
+      var read = pick(READ), sig = pick(SIGNALS);
+      var art = links.filter(function(a){ return !used[key(a)] && !a.matches('[data-obs-auth]') && txt(a) === 'ARTIFACTS'; });
+      var obs = links.filter(function(a){
+        if(used[key(a)]) return false;
+        return a.matches('[data-obs-auth]') || OBSERVE.indexOf(txt(a)) !== -1;
+      });
+      [read, sig, art, obs].forEach(function(g){ g.forEach(function(a){ used[key(a)] = 1; }); });
+      var leftovers = links.filter(function(a){ return !used[key(a)]; });
+      links.forEach(function(a){ nav.removeChild(a); });
+      function makeGroup(label, items){
+        var grp = document.createElement('div'); grp.className = 'nav-group';
+        var top = document.createElement('span'); top.className = 'nav-top'; top.textContent = label;
+        top.addEventListener('click', function(e){ e.stopPropagation(); });
+        var drop = document.createElement('div'); drop.className = 'nav-drop';
+        items.forEach(function(a){ drop.appendChild(a); });
+        grp.appendChild(top); grp.appendChild(drop);
+        return grp;
+      }
+      if(read.length) nav.appendChild(makeGroup('READ', read));
+      if(sig.length) nav.appendChild(makeGroup('SIGNALS', sig));
+      art.forEach(function(a){ nav.appendChild(a); });
+      if(obs.length) nav.appendChild(makeGroup('OBSERVER', obs));
+      leftovers.forEach(function(a){ nav.appendChild(a); });
+    }catch(e){}
+  }
+
+  function run(){ injectNavCSS(); groupNav(); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();
