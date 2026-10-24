@@ -20,7 +20,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Mono",monospace;min-height:100vh;display:flex;flex-direction:column}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.12) 2px,rgba(0,0,0,.12) 4px)}
-.vault-corner{position:fixed;top:18px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
+.vault-corner{position:fixed;bottom:22px;right:22px;z-index:100;background:rgba(10,9,8,.85);border:2px solid var(--gold);color:var(--gold);font-family:"IBM Plex Mono",monospace;font-size:15px;letter-spacing:3px;padding:12px 24px;cursor:pointer;text-decoration:none;display:inline-block;transition:.3s;backdrop-filter:blur(4px)}
 .vault-corner:hover{background:var(--gold);color:#000;box-shadow:0 0 24px rgba(201,162,39,.5);transform:scale(1.05)}
 header{border-bottom:1px solid var(--line);padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
 .brand{font-family:"Cormorant Garamond",serif;font-size:22px;letter-spacing:4px;color:var(--gold);text-decoration:none}
@@ -45,7 +45,7 @@ h1{font-family:"Cormorant Garamond",serif;font-size:44px;letter-spacing:2px;marg
 .cta-btn:hover{box-shadow:0 0 32px rgba(201,162,39,.5);transform:scale(1.03)}
 .fine{font-size:10px;color:var(--dim);letter-spacing:1px;line-height:1.8}
 footer{border-top:1px solid var(--line);padding:16px;text-align:center;font-size:10px;letter-spacing:2px;color:var(--dim)}
-@media(max-width:600px){.vault-corner{top:64px;right:12px;font-size:11px;padding:8px 14px}h1{font-size:32px}}
+@media(max-width:600px){.vault-corner{bottom:22px;right:12px;font-size:11px;padding:8px 14px}h1{font-size:32px}}
 </style>
 </head>
 <body>
