@@ -33,10 +33,14 @@
   <div class="kicker">// TRANSMISSION</div>
   <h1 class="serif">Enter the Archive</h1>
   <p>A recovered digital archive from a forgotten future. Relic 001 and other recovered artifacts are available in the Archive. Welcome to the Ruins.</p>
-  <video controls preload="metadata" poster="../relic-001.jpg" playsinline>
+  <video autoplay muted loop controls preload="auto" poster="../relic-001.jpg" playsinline>
     <source src="neoruins-trailer-website.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
+  <script>
+    // Autoplay fallback: browsers only allow autoplay when muted, which this cut already is.
+    (function(){ var v=document.querySelector('video'); if(!v) return; v.muted=true; var p=v.play(); if(p && p.catch) p.catch(function(){}); })();
+  </script>
   <div style="margin-top:28px">
     <a class="btn" href="../artifacts.html">BROWSE THE ARTIFACTS</a>
     <a class="btn ghost" href="../index.html#archive">BACK TO THE ARCHIVE</a>
