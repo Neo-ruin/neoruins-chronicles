@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Keep hidden preview pages out of search results.
+Disallow: /creator-preview/
+Disallow: /*-preview.html
+
+Sitemap: https://neoruins.com/sitemap.xml
